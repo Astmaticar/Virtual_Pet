@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/pet', require('./routes/petRoutes'));
 
 const startServer = async () => {
   try {

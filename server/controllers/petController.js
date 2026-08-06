@@ -1,0 +1,124 @@
+const Pet = require('../models/Pet');
+const { calculateDecay } = require('../utils/statDecay');
+
+const checkLevelUp = (pet) => {
+  if (pet.xp >= pet.level * 100) {
+    pet.level += 1;
+    pet.xp = 0;
+  }
+
+  return pet;
+};
+
+exports.getPet = async (req, res) => {
+  try {
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    const updatedStats = calculateDecay(pet);
+
+    pet.hunger = updatedStats.hunger;
+    pet.cleanliness = updatedStats.cleanliness;
+    pet.happiness = updatedStats.happiness;
+    pet.energy = updatedStats.energy;
+    pet.lastUpdated = new Date();
+
+    await pet.save();
+
+    res.status(200).json(pet);
+  } catch (error) {
+    console.error('Get pet error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.createPet = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const existingPet = await Pet.findOne({ owner: req.user });
+    if (existingPet) {
+      return res.status(400).json({ message: 'Pet already exists for this user' });
+    }
+
+    const pet = await Pet.create({
+      owner: req.user,
+      name: name || 'Milo',
+    });
+
+    res.status(201).json(pet);
+  } catch (error) {
+    console.error('Create pet error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.feedPet = async (req, res) => {
+  try {
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    pet.hunger = Math.min(100, pet.hunger + 20);
+    pet.lastUpdated = new Date();
+    pet.xp += 5;
+    checkLevelUp(pet);
+
+    await pet.save();
+
+    res.status(200).json(pet);
+  } catch (error) {
+    console.error('Feed pet error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.cleanPet = async (req, res) => {
+  try {
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    pet.cleanliness = Math.min(100, pet.cleanliness + 25);
+    pet.lastUpdated = new Date();
+    pet.xp += 5;
+    checkLevelUp(pet);
+
+    await pet.save();
+
+    res.status(200).json(pet);
+  } catch (error) {
+    console.error('Clean pet error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.playWithPet = async (req, res) => {
+  try {
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    pet.happiness = Math.min(100, pet.happiness + 20);
+    pet.energy = Math.max(0, pet.energy - 10);
+    pet.lastUpdated = new Date();
+    pet.xp += 10;
+    checkLevelUp(pet);
+
+    await pet.save();
+
+    res.status(200).json(pet);
+  } catch (error) {
+    console.error('Play with pet error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
