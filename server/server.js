@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Virtual pet API is running' });
 });
 
+app.use('/api/auth', require('./routes/authRoutes'));
+
 const startServer = async () => {
   try {
     await connectDB();
