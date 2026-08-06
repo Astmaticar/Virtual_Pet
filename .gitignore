@@ -1,0 +1,14 @@
+# Root-level ignores
+node_modules/
+.env
+build/
+
+# Client-specific ignores
+client/node_modules/
+client/.env
+client/build/
+
+# Server-specific ignores
+server/node_modules/
+server/.env
+server/build/
