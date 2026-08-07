@@ -1,9 +1,20 @@
+import { PetProvider } from '../context/PetContext';
+import PetDisplay from './pet/PetDisplay';
+import PetStats from './pet/PetStats';
+import ActionButtons from './pet/ActionButtons';
+import './pet/PetDashboard.css';
+
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Dobrodošli u virtualnog ljubimca!</p>
-    </div>
+    <PetProvider>
+      <div className="dashboard-wrapper">
+        <div className="dashboard-grid">
+          <PetDisplay />
+          <PetStats />
+        </div>
+        <ActionButtons />
+      </div>
+    </PetProvider>
   );
 };
 

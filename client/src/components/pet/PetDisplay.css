@@ -1,0 +1,28 @@
+.pet-display {
+  border: 1px solid #d7d8e0;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(20, 23, 58, 0.08);
+}
+
+.pet-display h2 {
+  margin-bottom: 12px;
+  font-size: 1.9rem;
+}
+
+.pet-face {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+
+.pet-mood {
+  color: #4b4d5f;
+  margin-bottom: 8px;
+}
+
+.pet-level {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
