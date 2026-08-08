@@ -8,9 +8,9 @@
 
 .auth-form {
   width: min(440px, 100%);
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid var(--border);
-  border-radius: 28px;
+  background: linear-gradient(145deg, #fffdf8 0%, #fff4e6 100%);
+  border: 1px solid #f2dcbf;
+  border-radius: 30px;
   box-shadow: var(--shadow);
   padding: 32px 28px;
   display: grid;
@@ -18,7 +18,7 @@
 }
 
 .auth-form h2 {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   text-align: center;
   color: var(--text-h);
 }
@@ -28,20 +28,21 @@
   gap: 8px;
   font-size: 0.95rem;
   color: var(--text);
+  font-weight: 600;
 }
 
 .auth-form input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #e1daee;
-  border-radius: 12px;
+  border: 1px solid #efd3b4;
+  border-radius: 14px;
   font-size: 1rem;
-  background: #fcf8ff;
+  background: #fffaf3;
   color: var(--text-h);
 }
 
 .auth-form input:focus {
-  outline: 2px solid rgba(139, 124, 246, 0.24);
+  outline: 2px solid rgba(255, 139, 61, 0.24);
   border-color: var(--accent);
 }
 
@@ -50,7 +51,7 @@
   padding: 13px 14px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
   color: #fff;
   font-weight: 700;
   cursor: pointer;
@@ -63,7 +64,7 @@
 
 .auth-error {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #fff0f4;
   color: #a24d6b;
   border: 1px solid #f4c8d8;
@@ -73,7 +74,7 @@
   margin: 0;
   text-align: center;
   font-size: 0.95rem;
-  color: #747b8e;
+  color: #8b6c4d;
 }
 
 .auth-form a {

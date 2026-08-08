@@ -26,10 +26,28 @@ const PetDisplay = () => {
 
   return (
     <div className="pet-display">
-      <h2>{pet.name}</h2>
-      <div className="pet-face">{face}</div>
-      <div className="pet-mood">{moodText}</div>
-      <div className="pet-level">Razina: {pet.level} • XP: {pet.xp}</div>
+      <div className="pet-device-frame">
+        <div className="pet-screen">
+          <div className="pet-sky" aria-hidden="true">
+            <div className="pet-cloud cloud-one" />
+            <div className="pet-cloud cloud-two" />
+            <div className="pet-sun" />
+          </div>
+
+          <div className="pet-figure-wrap">
+            <div className="pet-face">{face}</div>
+            <div className="pet-caption">
+              <div className="pet-name">{pet.name}</div>
+              <div className="pet-mood">😊 {moodText}</div>
+              <div className="pet-badge">Nivo {pet.level} · {pet.xp} XP</div>
+            </div>
+          </div>
+
+          <div className="pet-ground" aria-hidden="true">
+            <div className="pet-platform" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

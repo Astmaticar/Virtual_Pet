@@ -21,14 +21,6 @@ const PetStats = () => {
 
   return (
     <div className="pet-stats">
-      <div className="stat-row">
-        <span>Razina</span>
-        <strong>{pet.level}</strong>
-      </div>
-      <div className="stat-row">
-        <span>XP</span>
-        <strong>{pet.xp}</strong>
-      </div>
       {stats.map((stat) => (
         <div className="stat-group" key={stat.label}>
           <div className="stat-label">
