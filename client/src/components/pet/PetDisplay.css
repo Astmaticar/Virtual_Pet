@@ -1,28 +1,36 @@
 .pet-display {
-  border: 1px solid #d7d8e0;
-  background: #ffffff;
-  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, #ffffff 0%, #fdf2ff 100%);
+  border-radius: var(--radius-lg);
   padding: 24px;
   text-align: center;
-  box-shadow: 0 12px 30px rgba(20, 23, 58, 0.08);
+  box-shadow: var(--shadow);
 }
 
 .pet-display h2 {
-  margin-bottom: 12px;
-  font-size: 1.9rem;
+  margin-bottom: 10px;
+  font-size: 1.6rem;
 }
 
 .pet-face {
-  font-size: 4rem;
-  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  margin: 10px auto 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(139, 124, 246, 0.18), rgba(242, 167, 196, 0.26));
+  font-size: 3.4rem;
 }
 
 .pet-mood {
-  color: #4b4d5f;
-  margin-bottom: 8px;
+  color: #7b6a94;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .pet-level {
-  color: #6b7280;
+  color: #8a7ea1;
   font-size: 0.95rem;
 }
