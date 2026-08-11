@@ -49,35 +49,37 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link className="navbar-brand" to="/">
-        Virtualni ljubimac
-      </Link>
+      <div className="navbar-shell">
+        <Link className="navbar-brand" to="/">
+          Virtualni ljubimac
+        </Link>
 
-      <div className="navbar-actions">
-        {weatherDisplay && (
-          <div className="navbar-weather" title="Trenutno vrijeme">
-            <span className="navbar-weather-icon">{weatherDisplay.icon}</span>
-            <span className="navbar-weather-temp">{Math.round(weather.temperature)}°C</span>
-          </div>
-        )}
+        <div className="navbar-actions">
+          {weatherDisplay && (
+            <div className="navbar-weather" title="Trenutno vrijeme">
+              <span className="navbar-weather-icon">{weatherDisplay.icon}</span>
+              <span className="navbar-weather-temp">{Math.round(weather.temperature)}°C</span>
+            </div>
+          )}
 
-        {!token ? (
-          <>
-            <Link className="navbar-link" to="/login">
-              Prijava
-            </Link>
-            <Link className="navbar-link" to="/register">
-              Registracija
-            </Link>
-          </>
-        ) : (
-          <>
-            {user?.username && <span className="navbar-user">{user.username}</span>}
-            <button type="button" className="navbar-logout" onClick={handleLogout}>
-              Odjava
-            </button>
-          </>
-        )}
+          {!token ? (
+            <>
+              <Link className="navbar-link" to="/login">
+                Prijava
+              </Link>
+              <Link className="navbar-link" to="/register">
+                Registracija
+              </Link>
+            </>
+          ) : (
+            <>
+              {user?.username && <span className="navbar-user">{user.username}</span>}
+              <button type="button" className="navbar-logout" onClick={handleLogout}>
+                Odjava
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

@@ -3,48 +3,51 @@
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 2px;
+  gap: 14px;
+  margin-top: 0;
 }
 
 .action-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .action-buttons button {
   appearance: none;
   border: none;
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   color: #ffffff;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 10px 18px rgba(120, 80, 40, 0.16);
-  font-size: 1.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 6px 0 var(--button-shadow, #c85f12);
+  font-size: 1.7rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.action-buttons button:nth-child(1) {
-  background: linear-gradient(135deg, #ffa94d 0%, #ffbf69 100%);
+.action-item:nth-child(1) button {
+  background: linear-gradient(135deg, #ff8c42 0%, #ffb36b 100%);
+  --button-shadow: #c95f12;
 }
 
-.action-buttons button:nth-child(2) {
-  background: linear-gradient(135deg, #4dabf7 0%, #7dc4ff 100%);
+.action-item:nth-child(2) button {
+  background: linear-gradient(135deg, #4fc3f7 0%, #79d5ff 100%);
+  --button-shadow: #1486b8;
 }
 
-.action-buttons button:nth-child(3) {
-  background: linear-gradient(135deg, #ff6b9d 0%, #ff8eb6 100%);
+.action-item:nth-child(3) button {
+  background: linear-gradient(135deg, #ff5c8a 0%, #ff86ab 100%);
+  --button-shadow: #b72f5d;
 }
 
 .action-buttons button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 22px rgba(120, 80, 40, 0.2);
+  transform: translateY(-1px);
+  filter: brightness(1.03);
 }
 
 .action-buttons button:disabled {
@@ -53,19 +56,25 @@
   transform: none;
 }
 
+.action-buttons button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--button-shadow, #c85f12);
+}
+
 .action-label {
   font-size: 0.76rem;
-  color: #7a5a3d;
-  font-weight: 700;
+  color: var(--button-shadow, #c85f12);
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 600px) {
   .action-buttons {
-    gap: 8px;
+    gap: 10px;
   }
 
   .action-buttons button {
-    width: 58px;
-    height: 58px;
+    width: 60px;
+    height: 60px;
   }
 }

@@ -8,9 +8,9 @@
 
 .auth-form {
   width: min(440px, 100%);
-  background: linear-gradient(145deg, #fffdf8 0%, #fff4e6 100%);
-  border: 1px solid #f2dcbf;
-  border-radius: 30px;
+  background: linear-gradient(145deg, #fffdf7 0%, #fff3df 100%);
+  border: 3px solid rgba(97, 74, 52, 0.16);
+  border-radius: 32px;
   box-shadow: var(--shadow);
   padding: 32px 28px;
   display: grid;
@@ -26,23 +26,23 @@
 .auth-form label {
   display: grid;
   gap: 8px;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: var(--text);
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .auth-form input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #efd3b4;
+  border: 2px solid rgba(97, 74, 52, 0.14);
   border-radius: 14px;
   font-size: 1rem;
-  background: #fffaf3;
+  background: #fffdf7;
   color: var(--text-h);
 }
 
 .auth-form input:focus {
-  outline: 2px solid rgba(255, 139, 61, 0.24);
+  outline: 2px solid rgba(255, 140, 66, 0.26);
   border-color: var(--accent);
 }
 
@@ -53,13 +53,19 @@
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   transition: transform 0.15s ease;
+  box-shadow: 0 6px 0 #c95f12;
 }
 
 .auth-form button:hover {
   transform: translateY(-1px);
+}
+
+.auth-form button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #c95f12;
 }
 
 .auth-error {
@@ -67,7 +73,7 @@
   border-radius: 14px;
   background: #fff0f4;
   color: #a24d6b;
-  border: 1px solid #f4c8d8;
+  border: 2px solid #f4c8d8;
 }
 
 .auth-form p {

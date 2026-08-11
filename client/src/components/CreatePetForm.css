@@ -1,7 +1,7 @@
 .create-pet-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 240, 255, 0.95));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(255, 245, 220, 0.96));
+  border: 3px solid rgba(97, 74, 52, 0.16);
+  border-radius: 30px;
   padding: 28px;
   box-shadow: var(--shadow);
   max-width: 560px;
@@ -26,9 +26,9 @@
 }
 
 .pet-choice {
-  border: 1px solid #e7ddf7;
+  border: 2px solid rgba(79, 195, 247, 0.2);
   border-radius: 16px;
-  background: #fffdfd;
+  background: #fffdf7;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -40,13 +40,13 @@
 
 .pet-choice:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(139, 124, 246, 0.12);
+  box-shadow: 0 8px 16px rgba(255, 140, 66, 0.12);
 }
 
 .pet-choice.selected {
   border-color: var(--accent);
-  box-shadow: 0 10px 18px rgba(139, 124, 246, 0.16);
-  background: linear-gradient(135deg, #fff8ff 0%, #f4f0ff 100%);
+  box-shadow: 0 10px 18px rgba(255, 140, 66, 0.18);
+  background: linear-gradient(135deg, #fff8ed 0%, #fff1db 100%);
 }
 
 .pet-choice-emoji {
@@ -54,7 +54,7 @@
 }
 
 .pet-choice-label {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-h);
 }
 
@@ -75,9 +75,9 @@
 .create-pet-form input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #e0d7ee;
+  border: 2px solid rgba(97, 74, 52, 0.16);
   border-radius: 12px;
-  background: #fcf8ff;
+  background: #fffdf7;
   color: var(--text-h);
 }
 
@@ -85,10 +85,16 @@
   border: none;
   border-radius: 999px;
   padding: 12px 14px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
   color: white;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
+  box-shadow: 0 6px 0 #c95f12;
+}
+
+.create-pet-form button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #c95f12;
 }
 
 .create-pet-form button:disabled {
@@ -101,7 +107,7 @@
   border-radius: 12px;
   background: #fff0f4;
   color: #a24d6b;
-  border: 1px solid #f4c8d8;
+  border: 2px solid #f4c8d8;
 }
 
 @media (max-width: 600px) {
