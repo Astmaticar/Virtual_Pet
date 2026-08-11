@@ -8,9 +8,79 @@
 }
 
 .dashboard-scene-panel {
+  position: relative;
   display: grid;
   gap: 10px;
   justify-items: center;
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-screen {
+  background: linear-gradient(180deg, #1a1a3e 0%, #2d2d5f 58%, #1f2449 100%);
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-sky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255, 255, 255, 0.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 18% 34%, rgba(255, 249, 200, 0.9) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 31% 12%, rgba(255, 255, 255, 0.85) 0 2px, transparent 3px),
+    radial-gradient(circle at 44% 26%, rgba(255, 255, 255, 0.85) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 58% 16%, rgba(255, 249, 200, 0.92) 0 2px, transparent 3px),
+    radial-gradient(circle at 66% 36%, rgba(255, 255, 255, 0.8) 0 2px, transparent 3px),
+    radial-gradient(circle at 76% 14%, rgba(255, 255, 255, 0.88) 0 2px, transparent 3px),
+    radial-gradient(circle at 84% 28%, rgba(255, 249, 200, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.82) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 88% 46%, rgba(255, 255, 255, 0.82) 0 1.8px, transparent 3px);
+  opacity: 0.85;
+  animation: night-twinkle 4.8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-sun {
+  background: radial-gradient(circle at 35% 35%, #fffef4 0 42%, #f7e9b0 68%, #ead36a 100%);
+  box-shadow: 0 0 25px rgba(255, 255, 240, 0.4);
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-sun::after {
+  content: '';
+  position: absolute;
+  inset: 8px 2px 8px 20px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #1a1a3e 0%, #2d2d5f 100%);
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-cloud {
+  background: rgba(74, 74, 106, 0.78);
+  opacity: 0.72;
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-ground {
+  filter: brightness(0.86) saturate(0.95);
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-grass-band {
+  background: linear-gradient(180deg, #5bbf3f 0%, #469936 100%);
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-grass-blade {
+  background: #40862f;
+}
+
+.dashboard-scene-panel[data-scene='night'] .pet-platform {
+  background: linear-gradient(180deg, #63c847 0%, #459d35 100%);
+  border-color: rgba(41, 94, 28, 0.28);
+}
+
+@keyframes night-twinkle {
+  from {
+    opacity: 0.45;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .dashboard-stats-panel {
@@ -22,6 +92,51 @@
   text-align: center;
   padding: 28px;
   color: var(--text);
+}
+
+.weather-widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 22px;
+  background: rgba(255, 253, 247, 0.9);
+  border: 3px solid rgba(97, 74, 52, 0.14);
+  box-shadow: var(--shadow);
+}
+
+.weather-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+
+.scene-preview-toggle {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--accent-2) 0%, #79d5ff 100%);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #1486b8;
+}
+
+.scene-preview-toggle:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #1486b8;
+}
+
+.weather-note {
+  text-align: center;
+  color: var(--text);
+  font-size: 0.92rem;
+  padding: 0 6px;
 }
 
 @media (min-width: 900px) {

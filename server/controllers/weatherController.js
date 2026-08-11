@@ -19,10 +19,21 @@ exports.getWeather = async (req, res) => {
 
     const weatherData = response.data;
 
+    const condition = weatherData.weather?.[0]?.main;
+    const dt = weatherData.dt;
+    const sunrise = weatherData.sys?.sunrise;
+    const sunset = weatherData.sys?.sunset;
+
+    const isDay = typeof dt === 'number' && typeof sunrise === 'number' && typeof sunset === 'number'
+      ? dt >= sunrise && dt <= sunset
+      : false;
+
     res.status(200).json({
       city: weatherData.name,
       temperature: weatherData.main?.temp,
       description: weatherData.weather?.[0]?.description,
+      condition,
+      isDay,
     });
   } catch (error) {
     console.error('Weather API error:', error.message);

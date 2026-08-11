@@ -3,12 +3,30 @@ import api from '../services/api';
 
 const PetContext = createContext(null);
 
+const buildLocalWeatherFallback = () => {
+  const hour = new Date().getHours();
+  const isDayFallback = hour >= 6 && hour < 20;
+
+  return {
+    city: 'Zagreb',
+    temperature: isDayFallback ? 23 : 16,
+    description: isDayFallback ? 'clear sky' : 'few clouds',
+    condition: isDayFallback ? 'Clear' : 'Clouds',
+    isDay: isDayFallback,
+  };
+};
+
 export const PetProvider = ({ children }) => {
   const [pet, setPet] = useState(null);
   const [petExists, setPetExists] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [weather, setWeather] = useState(null);
+  const [weatherCondition, setWeatherCondition] = useState(null);
+  const [isDay, setIsDay] = useState(true);
+  const [weatherLoading, setWeatherLoading] = useState(true);
+  const [weatherError, setWeatherError] = useState(null);
 
   const fetchPet = async () => {
     setLoading(true);
@@ -32,8 +50,33 @@ export const PetProvider = ({ children }) => {
     }
   };
 
+  const fetchWeather = async () => {
+    setWeatherLoading(true);
+    setWeatherError(null);
+
+    try {
+      const response = await api.get('/weather');
+      const weatherData = response.data;
+
+      setWeather(weatherData);
+      setWeatherCondition(weatherData.condition || null);
+      setIsDay(Boolean(weatherData.isDay));
+    } catch (err) {
+      const fallbackWeather = buildLocalWeatherFallback();
+
+      setWeather(fallbackWeather);
+      setWeatherCondition(fallbackWeather.condition);
+      setIsDay(fallbackWeather.isDay);
+      setWeatherError(null);
+      console.warn('Weather API unavailable, using local fallback.', err);
+    } finally {
+      setWeatherLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPet();
+    fetchWeather();
   }, []);
 
   const createPet = async (name) => {
@@ -73,7 +116,24 @@ export const PetProvider = ({ children }) => {
   const play = () => runAction('play');
 
   return (
-    <PetContext.Provider value={{ pet, petExists, loading, error, actionLoading, feed, clean, play, createPet, fetchPet }}>
+    <PetContext.Provider value={{
+      pet,
+      petExists,
+      loading,
+      error,
+      actionLoading,
+      weather,
+      weatherCondition,
+      isDay,
+      weatherLoading,
+      weatherError,
+      feed,
+      clean,
+      play,
+      createPet,
+      fetchPet,
+      fetchWeather,
+    }}>
       {children}
     </PetContext.Provider>
   );

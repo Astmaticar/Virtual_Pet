@@ -64,12 +64,17 @@ exports.feedPet = async (req, res) => {
       return res.status(404).json({ message: 'Pet not found' });
     }
 
-    pet.hunger = Math.min(100, pet.hunger + 20);
-    pet.lastUpdated = new Date();
-    pet.xp += 5;
-    checkLevelUp(pet);
+    const prevHunger = typeof pet.hunger === 'number' ? pet.hunger : 0;
+    const newHunger = Math.min(100, prevHunger + 20);
 
-    await pet.save();
+    if (newHunger > prevHunger) {
+      pet.hunger = newHunger;
+      pet.lastUpdated = new Date();
+      pet.xp += 5;
+      checkLevelUp(pet);
+
+      await pet.save();
+    }
 
     res.status(200).json(pet);
   } catch (error) {
@@ -86,12 +91,17 @@ exports.cleanPet = async (req, res) => {
       return res.status(404).json({ message: 'Pet not found' });
     }
 
-    pet.cleanliness = Math.min(100, pet.cleanliness + 25);
-    pet.lastUpdated = new Date();
-    pet.xp += 5;
-    checkLevelUp(pet);
+    const prevClean = typeof pet.cleanliness === 'number' ? pet.cleanliness : 0;
+    const newClean = Math.min(100, prevClean + 25);
 
-    await pet.save();
+    if (newClean > prevClean) {
+      pet.cleanliness = newClean;
+      pet.lastUpdated = new Date();
+      pet.xp += 5;
+      checkLevelUp(pet);
+
+      await pet.save();
+    }
 
     res.status(200).json(pet);
   } catch (error) {
@@ -106,6 +116,10 @@ exports.playWithPet = async (req, res) => {
 
     if (!pet) {
       return res.status(404).json({ message: 'Pet not found' });
+    }
+    // Prevent playing if pet has no energy
+    if (typeof pet.energy === 'number' && pet.energy <= 0) {
+      return res.status(400).json({ message: 'Ljubimac je premoren za igru, pusti ga da se odmori' });
     }
 
     pet.happiness = Math.min(100, pet.happiness + 20);

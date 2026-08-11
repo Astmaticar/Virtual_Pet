@@ -1,7 +1,57 @@
 import { usePet } from '../../context/PetContext';
 import './PetDisplay.css';
 
-const PetDisplay = () => {
+const getSceneVariant = (condition, isDay) => {
+  const normalizedCondition = (condition || 'Clear').toLowerCase();
+
+  if (normalizedCondition === 'rain' || normalizedCondition === 'drizzle' || normalizedCondition === 'thunderstorm') {
+    return isDay ? `scene--rain scene--day` : 'scene--rain scene--night';
+  }
+
+  if (normalizedCondition === 'snow') {
+    return isDay ? `scene--snow scene--day` : 'scene--snow scene--night';
+  }
+
+  if (normalizedCondition === 'clouds') {
+    return isDay ? `scene--clouds scene--day` : 'scene--clouds scene--night';
+  }
+
+  return isDay ? 'scene--clear scene--day' : 'scene--clear scene--night';
+};
+
+const getCloudCount = (condition) => {
+  const normalizedCondition = (condition || 'Clear').toLowerCase();
+
+  if (normalizedCondition === 'clouds') {
+    return 6;
+  }
+
+  if (normalizedCondition === 'rain' || normalizedCondition === 'drizzle' || normalizedCondition === 'thunderstorm' || normalizedCondition === 'snow') {
+    return 4;
+  }
+
+  return 3;
+};
+
+const getRainCount = (condition) => {
+  const normalizedCondition = (condition || 'Clear').toLowerCase();
+
+  if (normalizedCondition === 'thunderstorm') {
+    return 26;
+  }
+
+  if (normalizedCondition === 'rain') {
+    return 18;
+  }
+
+  return 12;
+};
+
+const getSnowCount = () => 18;
+
+const cloudClassNames = ['cloud-one', 'cloud-two', 'cloud-three', 'cloud-4', 'cloud-5', 'cloud-6'];
+
+const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const { pet, loading } = usePet();
 
   if (loading) {
@@ -12,10 +62,17 @@ const PetDisplay = () => {
     return <div className="pet-display">Nema ljubimca za prikaz.</div>;
   }
 
-  const roundedStats = [pet.hunger, pet.cleanliness, pet.happiness, pet.energy].map((v) =>
-    Number.isFinite(v) ? Math.round(v) : 0
-  );
-  const statsAverage = (roundedStats.reduce((s, n) => s + n, 0) / roundedStats.length) || 0;
+  const sceneVariant = getSceneVariant(weatherCondition, isDay);
+  const cloudCount = getCloudCount(weatherCondition);
+  const weatherType = (weatherCondition || 'Clear').toLowerCase();
+  const showNight = isDay === false;
+  const showRain = weatherType === 'rain' || weatherType === 'drizzle' || weatherType === 'thunderstorm';
+  const showSnow = weatherType === 'snow';
+  const showClouds = weatherType === 'clouds' || showRain || showSnow || showNight;
+  const rainCount = getRainCount(weatherCondition);
+  const snowCount = getSnowCount();
+
+  const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
   let face = '😐';
   let moodText = 'Neutralan';
 
@@ -30,12 +87,64 @@ const PetDisplay = () => {
   return (
     <div className="pet-display">
       <div className="pet-device-frame">
-        <div className="pet-screen">
+        <div className={`pet-screen ${sceneVariant}`}>
           <div className="pet-sky" aria-hidden="true">
-            <div className="pet-cloud cloud-one" />
-            <div className="pet-cloud cloud-two" />
-            <div className="pet-cloud cloud-three" />
-            <div className="pet-sun" />
+            {showNight ? <div className="pet-moon" /> : <div className="pet-sun" />}
+
+            {showNight && (
+              <>
+                <span className="pet-star star-a" />
+                <span className="pet-star star-b" />
+                <span className="pet-star star-c" />
+                <span className="pet-star star-d" />
+                <span className="pet-star star-e" />
+              </>
+            )}
+
+            {showClouds && (
+              <>
+                {Array.from({ length: cloudCount }).map((_, index) => (
+                  <div
+                    key={`cloud-${index}`}
+                    className={`pet-cloud ${cloudClassNames[index]} ${showNight ? 'pet-cloud--night' : ''} ${showRain ? 'pet-cloud--rain' : ''} ${showSnow ? 'pet-cloud--snow' : ''}`}
+                  />
+                ))}
+              </>
+            )}
+
+            {showRain && (
+              <div className="pet-weather-layer pet-rain-layer" aria-hidden="true">
+                {Array.from({ length: rainCount }).map((_, index) => (
+                  <span
+                    key={`rain-${index}`}
+                    className="pet-rain-drop"
+                    style={{
+                      left: `${(index * 6) % 100}%`,
+                      animationDelay: `${(index % 7) * 0.16}s`,
+                      animationDuration: `${0.9 + (index % 4) * 0.12}s`,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {showSnow && (
+              <div className="pet-weather-layer pet-snow-layer" aria-hidden="true">
+                {Array.from({ length: snowCount }).map((_, index) => (
+                  <span
+                    key={`snow-${index}`}
+                    className="pet-snow-flake"
+                    style={{
+                      left: `${(index * 7) % 100}%`,
+                      animationDelay: `${(index % 8) * 0.22}s`,
+                      animationDuration: `${3.8 + (index % 5) * 0.5}s`,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {weatherType === 'thunderstorm' && <div className="pet-lightning-flash" aria-hidden="true" />}
           </div>
 
           <div className="pet-side-decoration pet-flower" aria-hidden="true">

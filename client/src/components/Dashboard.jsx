@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PetProvider, usePet } from '../context/PetContext';
 import PetDisplay from './pet/PetDisplay';
 import PetStats from './pet/PetStats';
@@ -7,7 +7,20 @@ import CreatePetForm from './CreatePetForm';
 import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
-  const { petExists, loading } = usePet();
+  const { petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError } = usePet();
+  const [previewIsDay, setPreviewIsDay] = useState(null);
+
+  const effectiveIsDay = previewIsDay ?? isDay;
+
+  const handleTogglePreview = () => {
+    setPreviewIsDay((current) => {
+      if (current === null) {
+        return !isDay;
+      }
+
+      return !current;
+    });
+  };
 
   if (loading) {
     return <div className="dashboard-wrapper"><div className="dashboard-empty-state">Učitavanje ljubimca...</div></div>;
@@ -23,10 +36,35 @@ const DashboardContent = () => {
 
   return (
     <div className="dashboard-wrapper">
-      <div className="dashboard-scene-panel">
-        <PetDisplay />
+      <div className="weather-widget">
+        <div>
+          <strong>Vrijeme</strong>
+        </div>
+        {weather ? (
+          <div className="weather-details">
+            <span>{Math.round(weather.temperature)}°C</span>
+            <span>{weather.description}</span>
+          </div>
+        ) : weatherLoading ? (
+          <div className="weather-details">
+            <span>Učitavanje...</span>
+          </div>
+        ) : (
+          <div className="weather-details">
+            <span>{weatherError || 'Ne mogu dohvatiti vrijeme.'}</span>
+          </div>
+        )}
+        <button type="button" className="scene-preview-toggle" onClick={handleTogglePreview}>
+          {effectiveIsDay ? 'Preview noć' : 'Preview dan'}
+        </button>
+      </div>
+      <div className="dashboard-scene-panel" data-scene={effectiveIsDay ? 'day' : 'night'}>
+        <PetDisplay weatherCondition={weatherCondition} isDay={effectiveIsDay} />
         <ActionButtons />
       </div>
+      {weather && (
+        (weatherCondition === 'Rain' || weatherCondition === 'Drizzle' || weatherCondition === 'Thunderstorm' || weatherCondition === 'Snow' || !isDay)
+      ) && <div className="weather-note">Vrijeme je danas promjenjivo, pa je scena prilagođena nebu.</div>}
       <div className="dashboard-stats-panel">
         <PetStats />
       </div>

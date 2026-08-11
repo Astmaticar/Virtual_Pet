@@ -10,7 +10,10 @@ const calculateDecay = (pet) => {
     hunger: Math.max(0, pet.hunger - hoursPassed * 2),
     cleanliness: Math.max(0, pet.cleanliness - hoursPassed * 1.5),
     happiness: Math.max(0, pet.happiness - hoursPassed * 1),
-    energy: Math.max(0, pet.energy - hoursPassed * 1),
+    // Energy se regenerira kroz vrijeme (simulira odmor), a ne opada kao ostali statovi.
+    // Energy se smanjuje samo kad se igra (playWithPet), zato ovdje povećavamo energy
+    // za +3 po satu, ali ne prelazimo gornju granicu od 100.
+    energy: Math.min(100, pet.energy + hoursPassed * 3),
   };
 
   return updatedStats;
