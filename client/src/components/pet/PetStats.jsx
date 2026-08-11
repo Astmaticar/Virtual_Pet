@@ -21,17 +21,20 @@ const PetStats = () => {
 
   return (
     <div className="pet-stats">
-      {stats.map((stat) => (
-        <div className="stat-group" key={stat.label}>
-          <div className="stat-label">
-            <span>{stat.label}</span>
-            <strong>{stat.value}%</strong>
+      {stats.map((stat) => {
+        const display = Number.isFinite(stat.value) ? Math.round(stat.value) : 0;
+        return (
+          <div className="stat-group" key={stat.label}>
+            <div className="stat-label">
+              <span>{stat.label}</span>
+              <strong>{display}%</strong>
+            </div>
+            <div className="stat-bar">
+              <div className="stat-fill" style={{ width: `${display}%` }} />
+            </div>
           </div>
-          <div className="stat-bar">
-            <div className="stat-fill" style={{ width: `${stat.value}%` }} />
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

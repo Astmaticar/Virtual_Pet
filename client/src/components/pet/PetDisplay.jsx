@@ -12,7 +12,10 @@ const PetDisplay = () => {
     return <div className="pet-display">Nema ljubimca za prikaz.</div>;
   }
 
-  const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
+  const roundedStats = [pet.hunger, pet.cleanliness, pet.happiness, pet.energy].map((v) =>
+    Number.isFinite(v) ? Math.round(v) : 0
+  );
+  const statsAverage = (roundedStats.reduce((s, n) => s + n, 0) / roundedStats.length) || 0;
   let face = '😐';
   let moodText = 'Neutralan';
 
