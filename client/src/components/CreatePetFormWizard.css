@@ -1,0 +1,443 @@
+/* ═══════════════════════════════════════════════════════════ */
+/* CREATE PET FORM WIZARD - TAMAGOTCHI DEVICE STYLE             */
+/* ═══════════════════════════════════════════════════════════ */
+
+.wizard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d4c0 100%);
+}
+
+/* ─── Progress Indicator ─── */
+.wizard-progress {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(100, 100, 100, 0.3);
+  transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+  width: 16px;
+  height: 16px;
+  background: #4A90E2;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+}
+
+.progress-dot.completed {
+  background: #7FBB00;
+  box-shadow: 0 0 6px rgba(127, 187, 0, 0.4);
+}
+
+/* ─── Device Frame ─── */
+.wizard-device-frame {
+  width: 100%;
+  max-width: 380px;
+  padding: 16px;
+  background: linear-gradient(135deg, #d4a574 0%, #c9935f 100%);
+  border-radius: 32px;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.wizard-device-frame::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  background: linear-gradient(135deg, #e8c9a0 0%, #d9b896 100%);
+  border-radius: 28px;
+  z-index: -1;
+}
+
+/* ─── Screen ─── */
+.wizard-screen {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #c9edff 0%, #f9feff 58%, #daf8cf 100%);
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.82);
+  padding: 24px;
+}
+
+/* ─── Step Container ─── */
+.wizard-step {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.wizard-title {
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d2d5f;
+  text-align: center;
+  margin: 0;
+}
+
+.wizard-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ─── Species/Variant Selection ─── */
+.step-species .wizard-content,
+.step-variant .wizard-content {
+  gap: 24px;
+}
+
+.wizard-emoji-display {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(200, 220, 240, 0.6);
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.wizard-pet-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.wizard-pet-image-small {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.wizard-emoji-display.variant-preview {
+  background: linear-gradient(135deg, var(--color, #4A90E2), var(--color-dark, #2E5DB8)) !important;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.wizard-emoji-display.name-preview {
+  width: 100px;
+  height: 100px;
+}
+
+.wizard-emoji {
+  font-size: 80px;
+  line-height: 1;
+}
+
+.wizard-emoji-small {
+  font-size: 60px;
+}
+
+/* ─── Arrow Buttons ─── */
+.wizard-arrow-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #79d5ff 0%, #4ab5e8 100%);
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow:
+    0 6px 0 #1486b8,
+    0 8px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wizard-arrow-btn:hover {
+  background: linear-gradient(135deg, #8aded6, #58c1f0);
+  box-shadow:
+    0 8px 0 #1486b8,
+    0 10px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.wizard-arrow-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 2px 0 #1486b8,
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wizard-arrow-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 0 2px 0 #1486b8;
+}
+
+/* ─── Label ─── */
+.wizard-label {
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d2d5f;
+  text-align: center;
+  min-height: 28px;
+}
+
+/* ─── Gender Selection ─── */
+.gender-buttons {
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.gender-btn {
+  width: 100%;
+  max-width: 200px;
+  padding: 16px 20px;
+  border-radius: 999px;
+  border: 3px solid;
+  background: white;
+  color: #2d2d5f;
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.gender-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+}
+
+.gender-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.gender-btn.active {
+  box-shadow:
+    0 6px 0 rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.gender-symbol {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.gender-text {
+  font-size: 16px;
+}
+
+/* ─── Name Input ─── */
+.step-name .wizard-content {
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wizard-name-input {
+  width: 100%;
+  max-width: 260px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 2px solid #2d2d5f;
+  background: white;
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #2d2d5f;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.wizard-name-input:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.wizard-name-input::placeholder {
+  color: rgba(45, 45, 95, 0.5);
+}
+
+/* ─── Error Message ─── */
+.wizard-error {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 12px;
+  background: rgba(211, 47, 47, 0.1);
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+/* ─── Navigation Buttons ─── */
+.wizard-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+}
+
+.wizard-nav-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 999px;
+  border: none;
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wizard-btn-back {
+  background: linear-gradient(135deg, #a9a9a9 0%, #8b8b8b 100%);
+  color: white;
+}
+
+.wizard-btn-back:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b5b5b5, #959595);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25);
+}
+
+.wizard-btn-back:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.wizard-btn-back:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wizard-btn-next,
+.wizard-btn-submit {
+  background: linear-gradient(135deg, #79d5ff 0%, #4ab5e8 100%);
+  color: white;
+}
+
+.wizard-btn-next:hover,
+.wizard-btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #8aded6, #58c1f0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #1486b8;
+}
+
+.wizard-btn-next:active,
+.wizard-btn-submit:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #1486b8;
+}
+
+.wizard-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+  .wizard-container {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .wizard-device-frame {
+    padding: 12px;
+    max-width: 100%;
+  }
+
+  .wizard-screen {
+    min-height: 340px;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .wizard-title {
+    font-size: 20px;
+  }
+
+  .wizard-emoji-display {
+    width: 120px;
+    height: 120px;
+  }
+
+  .wizard-emoji {
+    font-size: 70px;
+  }
+
+  .wizard-emoji-small {
+    font-size: 50px;
+  }
+
+  .wizard-arrow-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+  }
+
+  .wizard-name-input {
+    font-size: 14px;
+  }
+
+  .wizard-nav-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}

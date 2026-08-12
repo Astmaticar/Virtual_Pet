@@ -51,6 +51,33 @@ const getSnowCount = () => 18;
 
 const cloudClassNames = ['cloud-one', 'cloud-two', 'cloud-three', 'cloud-4', 'cloud-5', 'cloud-6'];
 
+// Mood helper functions
+const getMood = (statsAverage) => {
+  if (statsAverage > 70) {
+    return 'happy';
+  }
+  if (statsAverage < 30) {
+    return 'sad';
+  }
+  return 'neutral';
+};
+
+const getMoodText = (mood) => {
+  const moodTexts = {
+    happy: 'Sretan',
+    neutral: 'Neutralan',
+    sad: 'Tužan',
+  };
+  return moodTexts[mood] || 'Neutralan';
+};
+
+const getMoodImagePath = (species, mood) => {
+  // Vraća path do slike raspoloženja na temelju vrste i raspoloženja
+  // TODO: Zamijeniti s pravim ilustracijama
+  // Očekivane datoteke: /src/assets/pets/{species}-{mood}.svg
+  return `/src/assets/pets/${species}-${mood}.png`;
+};
+
 const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const { pet, loading } = usePet();
 
@@ -99,16 +126,9 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   }) : null;
 
   const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
-  let face = '😐';
-  let moodText = 'Neutralan';
-
-  if (statsAverage > 70) {
-    face = '😄';
-    moodText = 'Sretan';
-  } else if (statsAverage < 30) {
-    face = '😢';
-    moodText = 'Tužan';
-  }
+  const mood = getMood(statsAverage);
+  const moodText = getMoodText(mood);
+  const moodImagePath = getMoodImagePath(pet.species, mood);
 
   return (
     <div className={`pet-display scene-${weatherType} ${showRain ? 'scene-rain' : ''} ${showSnow ? 'scene-snow' : ''} ${weatherType === 'clouds' ? 'scene-clouds' : ''}`}>
@@ -187,7 +207,15 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
 
           <div className="pet-figure-wrap">
             <div className="pet-shadow" aria-hidden="true" />
-            <div className="pet-face">{face}</div>
+            <img
+              src={moodImagePath}
+              alt={moodText}
+              className="pet-face"
+              onError={(e) => {
+                // Fallback na emoji ako slika nije dostupna
+                e.target.style.display = 'none';
+              }}
+            />
             <div className="pet-caption">
               <div className="pet-name">{pet.name}</div>
               <div className="pet-mood">😊 {moodText}</div>

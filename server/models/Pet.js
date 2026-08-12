@@ -10,6 +10,20 @@ const petSchema = new mongoose.Schema({
     type: String,
     default: 'Milo',
   },
+  species: {
+    type: String,
+    required: true,
+    enum: ['dog', 'cat', 'bird', 'rabbit'],
+  },
+  variant: {
+    type: String,
+    required: true,
+  },
+  gender: {
+    type: String,
+    required: true,
+    enum: ['male', 'female'],
+  },
   hunger: {
     type: Number,
     min: 0,

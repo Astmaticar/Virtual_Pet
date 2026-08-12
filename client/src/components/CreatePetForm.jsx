@@ -3,15 +3,16 @@ import { usePet } from '../context/PetContext';
 import './CreatePetForm.css';
 
 const petOptions = [
-  { id: 'bunny', emoji: '🐰', label: 'Zec', accent: 'Lagan i nježan' },
-  { id: 'cat', emoji: '🐱', label: 'Mačak', accent: 'Sneni i znatiželjan' },
-  { id: 'fox', emoji: '🦊', label: 'Lisica', accent: 'Pametan i šarmantan' },
-  { id: 'penguin', emoji: '🐧', label: 'Pingvin', accent: 'Sretan i energičan' },
+  { id: 'bunny', emoji: '🐰', label: 'Zec', accent: 'Lagan i nježan', species: 'rabbit', variant: 'brown' },
+  { id: 'cat', emoji: '🐱', label: 'Mačak', accent: 'Sneni i znatiželjan', species: 'cat', variant: 'gray' },
+  { id: 'fox', emoji: '🦊', label: 'Lisica', accent: 'Pametan i šarmantan', species: 'dog', variant: 'red' },
+  { id: 'penguin', emoji: '🐧', label: 'Pingvin', accent: 'Sretan i energičan', species: 'bird', variant: 'black' },
 ];
 
 const CreatePetForm = () => {
   const [name, setName] = useState('');
   const [selectedPet, setSelectedPet] = useState(petOptions[0].id);
+  const [gender, setGender] = useState('male');
   const { createPet, error, actionLoading } = usePet();
 
   const handleSubmit = async (event) => {
@@ -21,7 +22,10 @@ const CreatePetForm = () => {
       return;
     }
 
-    await createPet(name.trim());
+    const selectedPetOption = petOptions.find((pet) => pet.id === selectedPet);
+    const { species, variant } = selectedPetOption;
+
+    await createPet(name.trim(), species, variant, gender);
   };
 
   return (
@@ -54,6 +58,17 @@ const CreatePetForm = () => {
           placeholder="npr. Luna"
           required
         />
+
+        <label htmlFor="pet-gender">Spol</label>
+        <select
+          id="pet-gender"
+          value={gender}
+          onChange={(event) => setGender(event.target.value)}
+        >
+          <option value="male">Muško</option>
+          <option value="female">Žensko</option>
+        </select>
+
         {error && <div className="create-pet-error">{error}</div>}
         <button type="submit" disabled={actionLoading}>
           {actionLoading ? 'Stvaranje...' : 'Stvori ljubimca'}

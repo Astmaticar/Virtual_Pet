@@ -79,12 +79,12 @@ export const PetProvider = ({ children }) => {
     fetchWeather();
   }, []);
 
-  const createPet = async (name) => {
+  const createPet = async (name, species, variant, gender) => {
     setActionLoading(true);
     setError(null);
 
     try {
-      const response = await api.post('/pet', { name });
+      const response = await api.post('/pet', { name, species, variant, gender });
       setPet(response.data);
       setPetExists(true);
       return { success: true };

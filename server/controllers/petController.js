@@ -37,7 +37,29 @@ exports.getPet = async (req, res) => {
 
 exports.createPet = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, species, variant, gender } = req.body;
+
+    // Validacija enum vrijednosti
+    const validSpecies = ['dog', 'cat', 'bird', 'rabbit'];
+    const validGenders = ['male', 'female'];
+
+    if (!species || !validSpecies.includes(species)) {
+      return res.status(400).json({ 
+        message: `Neispravna vrsta ljubimca. Dozvoljene vrijednosti: ${validSpecies.join(', ')}` 
+      });
+    }
+
+    if (!gender || !validGenders.includes(gender)) {
+      return res.status(400).json({ 
+        message: `Neispravan spol. Dozvoljene vrijednosti: ${validGenders.join(', ')}` 
+      });
+    }
+
+    if (!variant) {
+      return res.status(400).json({ 
+        message: 'Varijanta je obavezna' 
+      });
+    }
 
     const existingPet = await Pet.findOne({ owner: req.user });
     if (existingPet) {
@@ -47,6 +69,9 @@ exports.createPet = async (req, res) => {
     const pet = await Pet.create({
       owner: req.user,
       name: name || 'Milo',
+      species,
+      variant,
+      gender,
     });
 
     res.status(201).json(pet);
