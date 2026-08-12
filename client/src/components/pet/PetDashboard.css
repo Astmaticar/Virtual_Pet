@@ -132,6 +132,49 @@
   box-shadow: 0 2px 0 #1486b8;
 }
 
+.condition-preview-panel {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.condition-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(200, 200, 200, 0.5);
+  color: #333;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.condition-btn:hover {
+  background: rgba(150, 150, 150, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.condition-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.condition-btn.active {
+  background: linear-gradient(135deg, #79d5ff 0%, #4ab5e8 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #1486b8;
+}
+
+.condition-btn.active:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #1486b8;
+}
+
 .weather-note {
   text-align: center;
   color: var(--text);

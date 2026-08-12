@@ -68,9 +68,35 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const showNight = isDay === false;
   const showRain = weatherType === 'rain' || weatherType === 'drizzle' || weatherType === 'thunderstorm';
   const showSnow = weatherType === 'snow';
-  const showClouds = weatherType === 'clouds' || showRain || showSnow || showNight;
+  const showClouds = true; // Pokazuj oblake za sve vremenske uvjete - čak i za vedro
   const rainCount = getRainCount(weatherCondition);
   const snowCount = getSnowCount();
+
+  const rainElements = showRain ? Array.from({ length: rainCount }).map((_, i) => (
+    <div
+      key={`rain-${i}`}
+      className="rain-drop"
+      style={{
+        left: `${(i * 5.5) % 100}%`,
+        animationDelay: `${(i % 6) * 0.15}s`,
+      }}
+    />
+  )) : null;
+
+  const snowElements = showSnow ? Array.from({ length: snowCount }).map((_, i) => {
+    // Pseudo-random raspored koristeći sinus za deterministički, rasparseniji raspored
+    const randomOffset = Math.sin(i * 12.9898) * 50 + 50;
+    return (
+      <div
+        key={`snow-${i}`}
+        className="snow-particle"
+        style={{
+          left: `${randomOffset}%`,
+          animationDelay: `${(i % 7) * 0.25}s`,
+        }}
+      />
+    );
+  }) : null;
 
   const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
   let face = '😐';
@@ -85,10 +111,12 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   }
 
   return (
-    <div className="pet-display">
+    <div className={`pet-display scene-${weatherType} ${showRain ? 'scene-rain' : ''} ${showSnow ? 'scene-snow' : ''} ${weatherType === 'clouds' ? 'scene-clouds' : ''}`}>
       <div className="pet-device-frame">
         <div className={`pet-screen ${sceneVariant}`}>
           <div className="pet-sky" aria-hidden="true">
+            {rainElements}
+            {snowElements}
             {showNight ? <div className="pet-moon" /> : <div className="pet-sun" />}
 
             {showNight && (

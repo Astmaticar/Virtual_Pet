@@ -169,16 +169,33 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: radial-gradient(circle, #fffbe1 0%, #f7e58b 68%, #f0d86f 100%);
-  box-shadow: 0 0 26px rgba(255, 243, 184, 0.5);
+  background: radial-gradient(circle at 34% 30%, #fffdf0 0%, #fff6cd 48%, #f6e08f 100%);
+  box-shadow:
+    0 0 24px rgba(255, 245, 188, 0.52),
+    inset -4px -4px 8px rgba(219, 190, 96, 0.35);
+  overflow: hidden;
+}
+
+.pet-moon::before {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  top: 17px;
+  left: 17px;
+  border-radius: 50%;
+  background: rgba(219, 194, 110, 0.28);
+  box-shadow:
+    13px -8px 0 -3px rgba(219, 194, 110, 0.2),
+    10px 12px 0 -4px rgba(219, 194, 110, 0.18);
 }
 
 .pet-moon::after {
   content: '';
   position: absolute;
-  inset: 10px 4px 10px 18px;
+  inset: 5px -3px 8px 20px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #2d2d5f 0%, #1a1a3e 100%);
+  background: linear-gradient(180deg, rgba(44, 44, 93, 0.9) 0%, rgba(26, 26, 62, 0.92) 100%);
 }
 
 .pet-star {
@@ -501,6 +518,66 @@
   83%, 100% {
     background: rgba(255, 255, 255, 0);
   }
+}
+
+.scene-rain .pet-sky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(100, 120, 140, 0.15);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  height: 12px;
+  background: rgba(200, 220, 240, 0.8);
+  transform: rotate(25deg);
+  animation: rain-drop-fall 1s linear infinite;
+  top: -20px;
+  pointer-events: none;
+}
+
+@keyframes rain-drop-fall {
+  to {
+    transform: translateY(480px) translateX(-15px) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+.snow-particle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  animation: snow-particle-fall 3.5s linear infinite;
+  top: -20px;
+  pointer-events: none;
+}
+
+@keyframes snow-particle-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0);
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(480px) translateX(30px);
+  }
+}
+
+.scene-clouds .pet-cloud {
+  opacity: 1;
+  background: rgba(150, 160, 180, 0.9);
 }
 
 @media (max-width: 600px) {

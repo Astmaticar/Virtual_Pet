@@ -9,8 +9,10 @@ import './pet/PetDashboard.css';
 const DashboardContent = () => {
   const { petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError } = usePet();
   const [previewIsDay, setPreviewIsDay] = useState(null);
+  const [previewCondition, setPreviewCondition] = useState(null);
 
   const effectiveIsDay = previewIsDay ?? isDay;
+  const effectiveCondition = previewCondition ?? weatherCondition;
 
   const handleTogglePreview = () => {
     setPreviewIsDay((current) => {
@@ -20,6 +22,10 @@ const DashboardContent = () => {
 
       return !current;
     });
+  };
+
+  const handleConditionChange = (condition) => {
+    setPreviewCondition(previewCondition === condition ? null : condition);
   };
 
   if (loading) {
@@ -57,9 +63,39 @@ const DashboardContent = () => {
         <button type="button" className="scene-preview-toggle" onClick={handleTogglePreview}>
           {effectiveIsDay ? 'Preview noć' : 'Preview dan'}
         </button>
+        <div className="condition-preview-panel">
+          <button
+            type="button"
+            className={`condition-btn ${previewCondition === 'Clear' ? 'active' : ''}`}
+            onClick={() => handleConditionChange('Clear')}
+          >
+            Vedro
+          </button>
+          <button
+            type="button"
+            className={`condition-btn ${previewCondition === 'Rain' ? 'active' : ''}`}
+            onClick={() => handleConditionChange('Rain')}
+          >
+            Kiša
+          </button>
+          <button
+            type="button"
+            className={`condition-btn ${previewCondition === 'Clouds' ? 'active' : ''}`}
+            onClick={() => handleConditionChange('Clouds')}
+          >
+            Oblačno
+          </button>
+          <button
+            type="button"
+            className={`condition-btn ${previewCondition === 'Snow' ? 'active' : ''}`}
+            onClick={() => handleConditionChange('Snow')}
+          >
+            Snijeg
+          </button>
+        </div>
       </div>
       <div className="dashboard-scene-panel" data-scene={effectiveIsDay ? 'day' : 'night'}>
-        <PetDisplay weatherCondition={weatherCondition} isDay={effectiveIsDay} />
+        <PetDisplay weatherCondition={effectiveCondition} isDay={effectiveIsDay} />
         <ActionButtons />
       </div>
       {weather && (
