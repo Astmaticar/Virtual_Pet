@@ -61,6 +61,19 @@ const petSchema = new mongoose.Schema({
     default: 'baby',
     enum: ['baby', 'child', 'adult'],
   },
+  isRunAway: {
+    type: Boolean,
+    default: false,
+  },
+  growthStageBeforeRunAway: {
+    type: String,
+    default: null,
+    enum: ['baby', 'child', 'adult', null],
+  },
+  criticalSince: {
+    type: Date,
+    default: null,
+  },
   lastUpdated: {
     type: Date,
     default: Date.now,

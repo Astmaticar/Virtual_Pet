@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { usePet } from '../../context/PetContext';
 import './PetDisplay.css';
 
@@ -85,6 +86,7 @@ const getPetImageByGrowthStage = (species, growthStage) => {
 
 const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const { pet, loading } = usePet();
+  const [imageError, setImageError] = useState(false);
 
   if (loading) {
     return <div className="pet-display">Učitavanje ljubimca...</div>;
@@ -93,6 +95,26 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   if (!pet) {
     return <div className="pet-display">Nema ljubimca za prikaz.</div>;
   }
+
+  const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
+  const mood = getMood(statsAverage);
+  const moodText = getMoodText(mood);
+  const moodImagePath = pet.growthStage === 'adult' ? getMoodImagePath(pet.species, mood) : null;
+
+  useEffect(() => {
+    setImageError(false);
+  }, [pet.species, pet.growthStage, mood]);
+
+  const getFallbackEmoji = (species) => {
+    const emojiMap = {
+      dog: '🐶',
+      cat: '🐱',
+      bird: '🐦',
+      rabbit: '🐰',
+    };
+
+    return emojiMap[species] || '🐾';
+  };
 
   const sceneVariant = getSceneVariant(weatherCondition, isDay);
   const cloudCount = getCloudCount(weatherCondition);
@@ -130,11 +152,7 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
     );
   }) : null;
 
-  const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
-  const mood = getMood(statsAverage);
-  const moodText = getMoodText(mood);
-  // Mood slike se prikazuju samo za adult fazu
-  const moodImagePath = pet.growthStage === 'adult' ? getMoodImagePath(pet.species, mood) : null;
+  const fallbackEmoji = getFallbackEmoji(pet.species);
 
   return (
     <div className={`pet-display growth-${pet.growthStage} scene-${weatherType} ${showRain ? 'scene-rain' : ''} ${showSnow ? 'scene-snow' : ''} ${weatherType === 'clouds' ? 'scene-clouds' : ''}`}>
@@ -214,32 +232,29 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
           <div className="pet-figure-wrap">
             <div className="pet-shadow" aria-hidden="true" />
             {pet.growthStage === 'adult' ? (
-              // Adult - prikaži mood slike
-              moodImagePath ? (
+              imageError || !moodImagePath ? (
+                <div className="pet-face pet-face-emoji">{fallbackEmoji}</div>
+              ) : (
                 <img
+                  key={`${pet.species}-${pet.growthStage}-${mood}`}
                   src={moodImagePath}
                   alt={moodText}
                   className="pet-face"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
+                  onError={() => setImageError(true)}
                 />
-              ) : (
-                <div className="pet-face pet-face-emoji">
-                  {mood === 'happy' ? '😄' : mood === 'sad' ? '😢' : '😐'}
-                </div>
               )
             ) : (
-              // Baby/Child - prikaži sliku po fazi rasta
-              <img
-                src={getPetImageByGrowthStage(pet.species, pet.growthStage)}
-                alt={`${pet.name} - ${pet.growthStage}`}
-                className="pet-face"
-                onError={(e) => {
-                  // Fallback na emoji ako slika nije dostupna
-                  e.target.style.display = 'none';
-                }}
-              />
+              imageError ? (
+                <div className="pet-face pet-face-emoji">{fallbackEmoji}</div>
+              ) : (
+                <img
+                  key={`${pet.species}-${pet.growthStage}`}
+                  src={getPetImageByGrowthStage(pet.species, pet.growthStage)}
+                  alt={`${pet.name} - ${pet.growthStage}`}
+                  className="pet-face"
+                  onError={() => setImageError(true)}
+                />
+              )
             )}
             <div className="pet-caption">
               <div className="pet-name">{pet.name}</div>

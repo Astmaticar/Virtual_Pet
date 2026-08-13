@@ -1,8 +1,14 @@
 import { usePet } from '../../context/PetContext';
+import PetRunAwayScreen from './PetRunAwayScreen';
 import './ActionButtons.css';
 
 const ActionButtons = () => {
-  const { feed, clean, play, actionLoading } = usePet();
+  const { runAwayInfo, pet, feed, clean, play, actionLoading } = usePet();
+
+  // Ako je pet pobjegao, prikaži PetRunAwayScreen umjesto normalnih gumba
+  if (runAwayInfo?.isRunAway || pet?.isRunAway) {
+    return <PetRunAwayScreen />;
+  }
 
   return (
     <div className="action-buttons">

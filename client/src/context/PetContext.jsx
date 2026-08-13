@@ -28,6 +28,7 @@ export const PetProvider = ({ children }) => {
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
   const [evolutionInfo, setEvolutionInfo] = useState(null);
+  const [runAwayInfo, setRunAwayInfo] = useState(null);
 
   const fetchPet = async () => {
     setLoading(true);
@@ -35,7 +36,18 @@ export const PetProvider = ({ children }) => {
 
     try {
       const response = await api.get('/pet');
+
+      if (response.data?.isRunAway) {
+        setRunAwayInfo({
+          isRunAway: true,
+          message: response.data.message,
+        });
+        setPetExists(true);
+        return;
+      }
+
       setPet(response.data);
+      setRunAwayInfo(null);
       setPetExists(true);
     } catch (err) {
       const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
@@ -48,6 +60,35 @@ export const PetProvider = ({ children }) => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Tiho ažuriranje - bez loading state-a, koristi se za polling
+  const pollPet = async () => {
+    try {
+      const response = await api.get('/pet');
+
+      if (response.data?.isRunAway) {
+        setRunAwayInfo({
+          isRunAway: true,
+          message: response.data.message,
+        });
+        setPetExists(true);
+        return;
+      }
+
+      setPet(response.data);
+      setRunAwayInfo(null);
+      setPetExists(true);
+      // Ne postavljamo error jer je polling u pozadini
+    } catch (err) {
+      const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
+      if (missingPet) {
+        setPet(null);
+        setPetExists(false);
+        setRunAwayInfo(null);
+      }
+      // Ne postavljamo error za polling - tiho ispod
     }
   };
 
@@ -78,6 +119,17 @@ export const PetProvider = ({ children }) => {
   useEffect(() => {
     fetchPet();
     fetchWeather();
+  }, []);
+
+  // Polling - poziva pollPet svakih 30 sekundi (bez white screena)
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      pollPet();
+    }, 30000); // 30 sekundi
+
+    return () => {
+      clearInterval(pollInterval);
+    };
   }, []);
 
   const createPet = async (name, species, variant, gender) => {
@@ -128,6 +180,43 @@ export const PetProvider = ({ children }) => {
   const clean = () => runAction('clean');
   const play = () => runAction('play');
 
+  const forgivePet = async () => {
+    setActionLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.put('/pet/forgive');
+      setPet(response.data.pet);
+      setRunAwayInfo(null);
+      return { success: true, message: response.data.message };
+    } catch (err) {
+      const message = err.response?.data?.message || 'Ne mogu oprostiti ljubimcu.';
+      setError(message);
+      return { success: false, message };
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const deletePet = async () => {
+    setActionLoading(true);
+    setError(null);
+
+    try {
+      await api.delete('/pet');
+      setPet(null);
+      setPetExists(false);
+      setRunAwayInfo(null);
+      return { success: true };
+    } catch (err) {
+      const message = err.response?.data?.message || 'Ne mogu obrisati ljubimca.';
+      setError(message);
+      return { success: false, message };
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <PetContext.Provider value={{
       pet,
@@ -141,10 +230,13 @@ export const PetProvider = ({ children }) => {
       weatherLoading,
       weatherError,
       evolutionInfo,
+      runAwayInfo,
       setEvolutionInfo,
       feed,
       clean,
       play,
+      forgivePet,
+      deletePet,
       createPet,
       fetchPet,
       fetchWeather,
