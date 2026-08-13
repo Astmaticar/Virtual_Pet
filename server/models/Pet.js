@@ -56,6 +56,11 @@ const petSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  growthStage: {
+    type: String,
+    default: 'baby',
+    enum: ['baby', 'child', 'adult'],
+  },
   lastUpdated: {
     type: Date,
     default: Date.now,

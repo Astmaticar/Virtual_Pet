@@ -1,13 +1,39 @@
 const Pet = require('../models/Pet');
 const { calculateDecay } = require('../utils/statDecay');
 
+// Pomoćna funkcija za ažuriranje faze rasta na temelju levela
+const updateGrowthStage = (pet) => {
+  const oldStage = pet.growthStage;
+  let newStage = 'baby';
+
+  if (pet.level >= 10) {
+    newStage = 'adult';
+  } else if (pet.level >= 5) {
+    newStage = 'child';
+  }
+
+  pet.growthStage = newStage;
+
+  return {
+    hasEvolved: oldStage !== newStage,
+    oldStage,
+    newStage,
+  };
+};
+
 const checkLevelUp = (pet) => {
+  let evolution = null;
+
   if (pet.xp >= pet.level * 100) {
     pet.level += 1;
     pet.xp = 0;
+    evolution = updateGrowthStage(pet);
   }
 
-  return pet;
+  return {
+    leveledUp: evolution !== null,
+    evolution,
+  };
 };
 
 exports.getPet = async (req, res) => {
@@ -96,9 +122,21 @@ exports.feedPet = async (req, res) => {
       pet.hunger = newHunger;
       pet.lastUpdated = new Date();
       pet.xp += 5;
-      checkLevelUp(pet);
+      const levelUpResult = checkLevelUp(pet);
 
       await pet.save();
+
+      const response = {
+        ...pet.toObject(),
+        leveledUp: levelUpResult.leveledUp,
+      };
+
+      if (levelUpResult.evolution && levelUpResult.evolution.hasEvolved) {
+        response.hasEvolved = true;
+        response.newStage = levelUpResult.evolution.newStage;
+      }
+
+      return res.status(200).json(response);
     }
 
     res.status(200).json(pet);
@@ -123,9 +161,21 @@ exports.cleanPet = async (req, res) => {
       pet.cleanliness = newClean;
       pet.lastUpdated = new Date();
       pet.xp += 5;
-      checkLevelUp(pet);
+      const levelUpResult = checkLevelUp(pet);
 
       await pet.save();
+
+      const response = {
+        ...pet.toObject(),
+        leveledUp: levelUpResult.leveledUp,
+      };
+
+      if (levelUpResult.evolution && levelUpResult.evolution.hasEvolved) {
+        response.hasEvolved = true;
+        response.newStage = levelUpResult.evolution.newStage;
+      }
+
+      return res.status(200).json(response);
     }
 
     res.status(200).json(pet);
@@ -151,11 +201,21 @@ exports.playWithPet = async (req, res) => {
     pet.energy = Math.max(0, pet.energy - 10);
     pet.lastUpdated = new Date();
     pet.xp += 10;
-    checkLevelUp(pet);
+    const levelUpResult = checkLevelUp(pet);
 
     await pet.save();
 
-    res.status(200).json(pet);
+    const response = {
+      ...pet.toObject(),
+      leveledUp: levelUpResult.leveledUp,
+    };
+
+    if (levelUpResult.evolution && levelUpResult.evolution.hasEvolved) {
+      response.hasEvolved = true;
+      response.newStage = levelUpResult.evolution.newStage;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     console.error('Play with pet error:', error);
     res.status(500).json({ message: 'Server error' });
