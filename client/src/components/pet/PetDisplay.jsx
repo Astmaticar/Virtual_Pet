@@ -73,9 +73,14 @@ const getMoodText = (mood) => {
 
 const getMoodImagePath = (species, mood) => {
   // Vraća path do slike raspoloženja na temelju vrste i raspoloženja
-  // TODO: Zamijeniti s pravim ilustracijama
-  // Očekivane datoteke: /src/assets/pets/{species}-{mood}.svg
+  // Očekivane datoteke: /src/assets/pets/{species}-{mood}.png
   return `/src/assets/pets/${species}-${mood}.png`;
+};
+
+const getPetImageByGrowthStage = (species, growthStage) => {
+  // Vraća path do slike ljubimca na temelju vrste i faze rasta
+  // Očekivane datoteke: /src/assets/pets/{species}-{baby/child/adult}.png
+  return `/src/assets/pets/${species}-${growthStage}.png`;
 };
 
 const PetDisplay = ({ weatherCondition, isDay = true }) => {
@@ -128,10 +133,11 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
   const mood = getMood(statsAverage);
   const moodText = getMoodText(mood);
-  const moodImagePath = getMoodImagePath(pet.species, mood);
+  // Mood slike se prikazuju samo za adult fazu
+  const moodImagePath = pet.growthStage === 'adult' ? getMoodImagePath(pet.species, mood) : null;
 
   return (
-    <div className={`pet-display scene-${weatherType} ${showRain ? 'scene-rain' : ''} ${showSnow ? 'scene-snow' : ''} ${weatherType === 'clouds' ? 'scene-clouds' : ''}`}>
+    <div className={`pet-display growth-${pet.growthStage} scene-${weatherType} ${showRain ? 'scene-rain' : ''} ${showSnow ? 'scene-snow' : ''} ${weatherType === 'clouds' ? 'scene-clouds' : ''}`}>
       <div className="pet-device-frame">
         <div className={`pet-screen ${sceneVariant}`}>
           <div className="pet-sky" aria-hidden="true">
@@ -207,15 +213,34 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
 
           <div className="pet-figure-wrap">
             <div className="pet-shadow" aria-hidden="true" />
-            <img
-              src={moodImagePath}
-              alt={moodText}
-              className="pet-face"
-              onError={(e) => {
-                // Fallback na emoji ako slika nije dostupna
-                e.target.style.display = 'none';
-              }}
-            />
+            {pet.growthStage === 'adult' ? (
+              // Adult - prikaži mood slike
+              moodImagePath ? (
+                <img
+                  src={moodImagePath}
+                  alt={moodText}
+                  className="pet-face"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="pet-face pet-face-emoji">
+                  {mood === 'happy' ? '😄' : mood === 'sad' ? '😢' : '😐'}
+                </div>
+              )
+            ) : (
+              // Baby/Child - prikaži sliku po fazi rasta
+              <img
+                src={getPetImageByGrowthStage(pet.species, pet.growthStage)}
+                alt={`${pet.name} - ${pet.growthStage}`}
+                className="pet-face"
+                onError={(e) => {
+                  // Fallback na emoji ako slika nije dostupna
+                  e.target.style.display = 'none';
+                }}
+              />
+            )}
             <div className="pet-caption">
               <div className="pet-name">{pet.name}</div>
               <div className="pet-mood">😊 {moodText}</div>

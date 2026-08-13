@@ -27,6 +27,7 @@ export const PetProvider = ({ children }) => {
   const [isDay, setIsDay] = useState(true);
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
+  const [evolutionInfo, setEvolutionInfo] = useState(null);
 
   const fetchPet = async () => {
     setLoading(true);
@@ -104,6 +105,18 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.put(`/pet/${action}`);
       setPet(response.data);
+
+      // Provjera je li došlo do evolucije
+      if (response.data.hasEvolved && response.data.newStage) {
+        setEvolutionInfo({
+          newStage: response.data.newStage,
+        });
+
+        // Automatski zatvori overlay nakon 3 sekunde
+        setTimeout(() => {
+          setEvolutionInfo(null);
+        }, 3000);
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Greška pri akciji.');
     } finally {
@@ -127,6 +140,8 @@ export const PetProvider = ({ children }) => {
       isDay,
       weatherLoading,
       weatherError,
+      evolutionInfo,
+      setEvolutionInfo,
       feed,
       clean,
       play,

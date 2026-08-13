@@ -4,10 +4,11 @@ import PetDisplay from './pet/PetDisplay';
 import PetStats from './pet/PetStats';
 import ActionButtons from './pet/ActionButtons';
 import CreatePetFormWizard from './CreatePetFormWizard';
+import EvolutionEffect from './EvolutionEffect';
 import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
-  const { petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError } = usePet();
+  const { petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError, evolutionInfo, setEvolutionInfo } = usePet();
   const [previewIsDay, setPreviewIsDay] = useState(null);
   const [previewCondition, setPreviewCondition] = useState(null);
 
@@ -104,6 +105,14 @@ const DashboardContent = () => {
       <div className="dashboard-stats-panel">
         <PetStats />
       </div>
+
+      {/* Evolucija overlay - prikazuje se kad se ljubimac razvija */}
+      {evolutionInfo && (
+        <EvolutionEffect
+          evolutionInfo={evolutionInfo}
+          onClose={() => setEvolutionInfo(null)}
+        />
+      )}
     </div>
   );
 };

@@ -317,6 +317,19 @@
   text-align: center;
   z-index: 2;
   animation: pet-bounce 2.2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.pet-display.growth-baby .pet-figure-wrap {
+  transform: translateX(-50%) scale(0.6) translateY(20px);
+}
+
+.pet-display.growth-child .pet-figure-wrap {
+  transform: translateX(-50%) scale(0.85) translateY(10px);
+}
+
+.pet-display.growth-adult .pet-figure-wrap {
+  transform: translateX(-50%) scale(1.1);
 }
 
 .pet-shadow {
@@ -341,6 +354,19 @@
   object-fit: contain;
   object-position: center;
   padding: 8px;
+  flex-shrink: 0;
+}
+
+.pet-face-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 138px;
+  height: 138px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fffbe5 0%, #ffd98c 52%, #ffb85c 100%);
+  font-size: 4.7rem;
+  box-shadow: inset 0 -8px 12px rgba(168, 92, 0, 0.16), 0 12px 18px rgba(120, 80, 40, 0.16);
   flex-shrink: 0;
 }
 
