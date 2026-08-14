@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   const status = err.status || err.statusCode || 500;
-  res.status(status).json({ success: false, message: err.message || 'Server error' });
+  res.status(status).json({ success: false, message: 'Server error' });
 });
 
 const startServer = async () => {
@@ -37,7 +37,7 @@ const startServer = async () => {
     await connectDB();
 
     const server = app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      // Server started successfully
     });
 
     server.on('error', (error) => {

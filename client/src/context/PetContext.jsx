@@ -86,7 +86,6 @@ export const PetProvider = ({ children }) => {
       setWeatherCondition(fallbackWeather.condition);
       setIsDay(fallbackWeather.isDay);
       setWeatherError(null);
-      console.warn('Weather API unavailable, using local fallback.', err);
     } finally {
       setWeatherLoading(false);
     }

@@ -10,25 +10,9 @@ import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
   const { pet, petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError, evolutionInfo, setEvolutionInfo } = usePet();
-  const [previewIsDay, setPreviewIsDay] = useState(null);
-  const [previewCondition, setPreviewCondition] = useState(null);
 
-  const effectiveIsDay = previewIsDay ?? isDay;
-  const effectiveCondition = previewCondition ?? weatherCondition;
-
-  const handleTogglePreview = () => {
-    setPreviewIsDay((current) => {
-      if (current === null) {
-        return !isDay;
-      }
-
-      return !current;
-    });
-  };
-
-  const handleConditionChange = (condition) => {
-    setPreviewCondition(previewCondition === condition ? null : condition);
-  };
+  const effectiveIsDay = isDay;
+  const effectiveCondition = weatherCondition;
 
   if (loading) {
     return <div className="dashboard-wrapper"><div className="dashboard-empty-state">Učitavanje ljubimca...</div></div>;
@@ -62,39 +46,6 @@ const DashboardContent = () => {
             <span>{weatherError || 'Ne mogu dohvatiti vrijeme.'}</span>
           </div>
         )}
-        <button type="button" className="scene-preview-toggle" onClick={handleTogglePreview}>
-          {effectiveIsDay ? 'Preview noć' : 'Preview dan'}
-        </button>
-        <div className="condition-preview-panel">
-          <button
-            type="button"
-            className={`condition-btn ${previewCondition === 'Clear' ? 'active' : ''}`}
-            onClick={() => handleConditionChange('Clear')}
-          >
-            Vedro
-          </button>
-          <button
-            type="button"
-            className={`condition-btn ${previewCondition === 'Rain' ? 'active' : ''}`}
-            onClick={() => handleConditionChange('Rain')}
-          >
-            Kiša
-          </button>
-          <button
-            type="button"
-            className={`condition-btn ${previewCondition === 'Clouds' ? 'active' : ''}`}
-            onClick={() => handleConditionChange('Clouds')}
-          >
-            Oblačno
-          </button>
-          <button
-            type="button"
-            className={`condition-btn ${previewCondition === 'Snow' ? 'active' : ''}`}
-            onClick={() => handleConditionChange('Snow')}
-          >
-            Snijeg
-          </button>
-        </div>
       </div>
       <div className="dashboard-scene-panel" data-scene={effectiveIsDay ? 'day' : 'night'}>
         <PetDisplay weatherCondition={effectiveCondition} isDay={effectiveIsDay} />
