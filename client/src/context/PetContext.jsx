@@ -28,7 +28,6 @@ export const PetProvider = ({ children }) => {
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
   const [evolutionInfo, setEvolutionInfo] = useState(null);
-  const [runAwayInfo, setRunAwayInfo] = useState(null);
 
   const fetchPet = async () => {
     setLoading(true);
@@ -36,18 +35,7 @@ export const PetProvider = ({ children }) => {
 
     try {
       const response = await api.get('/pet');
-
-      if (response.data?.isRunAway) {
-        setRunAwayInfo({
-          isRunAway: true,
-          message: response.data.message,
-        });
-        setPetExists(true);
-        return;
-      }
-
       setPet(response.data);
-      setRunAwayInfo(null);
       setPetExists(true);
     } catch (err) {
       const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
@@ -67,18 +55,7 @@ export const PetProvider = ({ children }) => {
   const pollPet = async () => {
     try {
       const response = await api.get('/pet');
-
-      if (response.data?.isRunAway) {
-        setRunAwayInfo({
-          isRunAway: true,
-          message: response.data.message,
-        });
-        setPetExists(true);
-        return;
-      }
-
       setPet(response.data);
-      setRunAwayInfo(null);
       setPetExists(true);
       // Ne postavljamo error jer je polling u pozadini
     } catch (err) {
@@ -86,7 +63,6 @@ export const PetProvider = ({ children }) => {
       if (missingPet) {
         setPet(null);
         setPetExists(false);
-        setRunAwayInfo(null);
       }
       // Ne postavljamo error za polling - tiho ispod
     }
@@ -187,7 +163,6 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.put('/pet/forgive');
       setPet(response.data.pet);
-      setRunAwayInfo(null);
       return { success: true, message: response.data.message };
     } catch (err) {
       const message = err.response?.data?.message || 'Ne mogu oprostiti ljubimcu.';
@@ -206,7 +181,6 @@ export const PetProvider = ({ children }) => {
       await api.delete('/pet');
       setPet(null);
       setPetExists(false);
-      setRunAwayInfo(null);
       return { success: true };
     } catch (err) {
       const message = err.response?.data?.message || 'Ne mogu obrisati ljubimca.';
@@ -230,7 +204,6 @@ export const PetProvider = ({ children }) => {
       weatherLoading,
       weatherError,
       evolutionInfo,
-      runAwayInfo,
       setEvolutionInfo,
       feed,
       clean,

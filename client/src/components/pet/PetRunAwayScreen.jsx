@@ -2,12 +2,19 @@ import { usePet } from '../../context/PetContext';
 import './PetRunAwayScreen.css';
 
 const PetRunAwayScreen = () => {
-  const { pet, runAwayInfo, forgivePet, deletePet, actionLoading } = usePet();
-  const isRunAway = runAwayInfo?.isRunAway || pet?.isRunAway;
+  const { pet, forgivePet, deletePet, actionLoading } = usePet();
 
-  if (!isRunAway) {
+  if (!pet || !pet.isRunAway) {
     return null;
   }
+
+  const isMalePet = pet.gender === 'male';
+  const runawayTitle = isMalePet ? `${pet.name} je pobjegao! 😢` : `${pet.name} je pobjegla! 😢`;
+  const forgiveText = isMalePet
+    ? 'Možeš ga pronaći i pozvati natrag, ili početi ispočetka s novim ljubimcem.'
+    : 'Možeš ju pronaći i pozvati natrag, ili početi ispočetka s novim ljubimcem.';
+  const forgiveButtonText = isMalePet ? 'Pozovi ga nazad' : 'Pozovi je natrag';
+  const forgiveButtonAriaLabel = isMalePet ? 'Pozovi ga nazad' : 'Pozovi je natrag';
 
   const handleForgive = async () => {
     const result = await forgivePet();
@@ -30,18 +37,17 @@ const PetRunAwayScreen = () => {
       <div className="runaway-container">
         <div className="runaway-header">
           <div className="runaway-icon">🏃</div>
-          <h2 className="runaway-title">{pet.name} je pobjegao! 😢</h2>
+          <h2 className="runaway-title">{runawayTitle}</h2>
         </div>
 
         <div className="runaway-message">
           <p>
-            Tvoj ljubimac je bio zanemaran i otišao je iz kuće. 
-            Ali nije prešišten! Još se možeš pomiriti s njim...
+            {pet.message || 'Tvoj ljubimac je bio zanemaran i otišao je iz kuće. Ali nije prešišten! Još se možeš pomiriti s njim...'}
           </p>
         </div>
 
         <div className="runaway-description">
-          <p>Možeš mu oprostiti i pozvati ga natrag, ili početi ispočetka s novim ljubimcem.</p>
+          <p>{forgiveText}</p>
         </div>
 
         <div className="runaway-actions">
@@ -50,10 +56,10 @@ const PetRunAwayScreen = () => {
             onClick={handleForgive}
             disabled={actionLoading}
             className="runaway-button runaway-button--forgive"
-            aria-label="Pozovi ga nazad"
+            aria-label={forgiveButtonAriaLabel}
           >
             <span className="runaway-button-emoji">🥺</span>
-            <span className="runaway-button-text">Pozovi ga nazad</span>
+            <span className="runaway-button-text">{forgiveButtonText}</span>
           </button>
 
           <button
@@ -70,7 +76,7 @@ const PetRunAwayScreen = () => {
 
         <div className="runaway-footer">
           <p className="runaway-footer-text">
-            Level: {pet.level} · {pet.name} te nikad neće zaboraviti... ❤️
+            {pet.name} te nikad neće zaboraviti... ❤️
           </p>
         </div>
       </div>

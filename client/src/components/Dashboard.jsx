@@ -3,12 +3,13 @@ import { PetProvider, usePet } from '../context/PetContext';
 import PetDisplay from './pet/PetDisplay';
 import PetStats from './pet/PetStats';
 import ActionButtons from './pet/ActionButtons';
+import PetRunAwayScreen from './pet/PetRunAwayScreen';
 import CreatePetFormWizard from './CreatePetFormWizard';
 import EvolutionEffect from './EvolutionEffect';
 import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
-  const { petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError, evolutionInfo, setEvolutionInfo } = usePet();
+  const { pet, petExists, loading, weather, weatherCondition, isDay, weatherLoading, weatherError, evolutionInfo, setEvolutionInfo } = usePet();
   const [previewIsDay, setPreviewIsDay] = useState(null);
   const [previewCondition, setPreviewCondition] = useState(null);
 
@@ -97,6 +98,7 @@ const DashboardContent = () => {
       </div>
       <div className="dashboard-scene-panel" data-scene={effectiveIsDay ? 'day' : 'night'}>
         <PetDisplay weatherCondition={effectiveCondition} isDay={effectiveIsDay} />
+        {pet?.isRunAway && <PetRunAwayScreen />}
         <ActionButtons />
       </div>
       {weather && (

@@ -59,9 +59,10 @@ exports.getPet = async (req, res) => {
 
     await pet.save();
 
-    // Ako je ljubimac pobjegao, vrati specijalnu poruku
+    // Ako je ljubimac pobjegao, vrati puni objekt s dodatnim statusnim poljima
     if (pet.isRunAway) {
       return res.status(200).json({
+        ...pet.toObject(),
         isRunAway: true,
         message: 'Tvoj ljubimac je pobjegao jer je bio zanemaren 😢',
       });
