@@ -56,6 +56,8 @@ exports.getPet = async (req, res) => {
       pet.growthStageBeforeRunAway = decayResult.growthStageBeforeRunAway;
     }
 
+    pet.lastUpdated = new Date();
+
     await pet.save();
 
     if (pet.isRunAway) {

@@ -251,7 +251,7 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
             <div className="pet-caption">
               <div className="pet-name">{pet.name}</div>
               <div className="pet-mood">{moodEmoji} {moodText}</div>
-              <div className="pet-badge">Nivo {pet.level} · {pet.xp} XP</div>
+              <div className="pet-badge">Lvl {pet.level} · {pet.xp} XP</div>
             </div>
           </div>
 
