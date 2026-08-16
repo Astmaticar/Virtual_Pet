@@ -1,6 +1,6 @@
 const calculateDecay = (pet) => {
   const now = new Date();
-  const lastUpdated = new Date(pet.lastUpdated);
+  const lastUpdated = new Date(pet.lastUpdated || Date.now());
 
   const minutesPassed = Math.max(0, (now - lastUpdated) / (1000 * 60));
 
@@ -16,37 +16,34 @@ const calculateDecay = (pet) => {
     energy: Math.min(100, pet.energy + minutesPassed * energyPerMinute),
   };
 
-  let runAwayInfo = {
-    isRunAway: pet.isRunAway || false,
-    criticalSince: pet.criticalSince || null,
+  const criticalStatRates = {
+    hunger: hungerPerMinute,
+    cleanliness: cleanlinessPerMinute,
+    happiness: happinessPerMinute,
   };
 
-  const allCriticalZero =
-    updatedStats.hunger <= 0 &&
-    updatedStats.cleanliness <= 0 &&
-    updatedStats.happiness <= 0;
+  const zeroTimestamps = Object.keys(criticalStatRates)
+    .filter((stat) => updatedStats[stat] <= 0)
+    .map((stat) => {
+      const previousValue = Number(pet[stat]) || 0;
+      const minutesToZero = previousValue > 0 ? previousValue / criticalStatRates[stat] : 0;
+      return new Date(lastUpdated.getTime() + minutesToZero * 60 * 1000);
+    });
 
-  if (allCriticalZero) {
-    if (!runAwayInfo.criticalSince) {
-      runAwayInfo.criticalSince = now;
-    }
+  const criticalSince = zeroTimestamps.length === 3
+    ? new Date(Math.max(...zeroTimestamps.map((timestamp) => timestamp.getTime())))
+    : null;
 
-    const hoursPassed = (now - new Date(runAwayInfo.criticalSince)) / (1000 * 60 * 60);
-    const CRITICAL_THRESHOLD_HOURS = 6;
+  const allCriticalZero = criticalSince !== null;
+  const CRITICAL_THRESHOLD_HOURS = 6;
 
-    if (hoursPassed >= CRITICAL_THRESHOLD_HOURS) {
-      runAwayInfo.isRunAway = true;
-      runAwayInfo.growthStageBeforeRunAway = pet.growthStage;
-    }
-  } else {
-    runAwayInfo.criticalSince = null;
-  }
+  const isRunAway = allCriticalZero && (now - criticalSince) >= CRITICAL_THRESHOLD_HOURS * 60 * 60 * 1000;
 
   return {
     ...updatedStats,
-    isRunAway: runAwayInfo.isRunAway,
-    criticalSince: runAwayInfo.criticalSince,
-    growthStageBeforeRunAway: runAwayInfo.growthStageBeforeRunAway || null,
+    isRunAway,
+    criticalSince,
+    growthStageBeforeRunAway: isRunAway ? pet.growthStage : null,
   };
 };
 

@@ -72,19 +72,18 @@ const getMoodText = (mood) => {
   return moodTexts[mood] || 'Neutralan';
 };
 
-const getMoodImagePath = (species, variant, mood) => {
-  // Vraća path do slike raspoloženja na temelju vrste, boje i raspoloženja
-  // Očekivane datoteke: /src/assets/pets/{species}-{variant}-{mood}.png
-  return `/src/assets/pets/${species}-${variant}-${mood}.png`;
+const getMoodEmoji = (mood) => {
+  const moodEmojis = {
+    happy: '😄',
+    neutral: '😐',
+    sad: '😢',
+  };
+  return moodEmojis[mood] || '😐';
 };
 
 const getPetImageByGrowthStage = (species, variant, growthStage) => {
   // Vraća path do slike ljubimca na temelju vrste, boje i faze rasta
   // Očekivane datoteke: /src/assets/pets/{species}-{variant}-{baby/child/adult}.png
-  if (growthStage === 'adult') {
-    return `/src/assets/pets/${species}-${variant}-adult.png`;
-  }
-
   return `/src/assets/pets/${species}-${variant}-${growthStage}.png`;
 };
 
@@ -111,8 +110,7 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const statsAverage = (pet.hunger + pet.cleanliness + pet.happiness + pet.energy) / 4;
   const mood = getMood(statsAverage);
   const moodText = getMoodText(mood);
-  const adultImagePath = getPetImageByGrowthStage(pet.species, pet.variant, 'adult');
-  const moodImagePath = pet.growthStage === 'adult' ? getMoodImagePath(pet.species, pet.variant, mood) : null;
+  const moodEmoji = getMoodEmoji(mood);
 
   const getFallbackEmoji = (species) => {
     const emojiMap = {
@@ -239,35 +237,20 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
           <div className="pet-side-decoration pet-rock" aria-hidden="true" />
 
           <div className="pet-figure-wrap">
-            <div className="pet-shadow" aria-hidden="true" />
-            {pet.growthStage === 'adult' ? (
-              imageError ? (
-                <div className="pet-face pet-face-emoji">{fallbackEmoji}</div>
-              ) : (
-                <img
-                  key={`${pet.species}-${pet.variant}-${pet.growthStage}`}
-                  src={adultImagePath}
-                  alt={`${pet.name} - ${pet.growthStage}`}
-                  className="pet-face"
-                  onError={() => setImageError(true)}
-                />
-              )
+            {imageError ? (
+              <div className="pet-face pet-face-emoji">{fallbackEmoji}</div>
             ) : (
-              imageError ? (
-                <div className="pet-face pet-face-emoji">{fallbackEmoji}</div>
-              ) : (
-                <img
-                  key={`${pet.species}-${pet.variant}-${pet.growthStage}`}
-                  src={getPetImageByGrowthStage(pet.species, pet.variant, pet.growthStage)}
-                  alt={`${pet.name} - ${pet.growthStage}`}
-                  className="pet-face"
-                  onError={() => setImageError(true)}
-                />
-              )
+              <img
+                key={`${pet.species}-${pet.variant}-${pet.growthStage}`}
+                src={getPetImageByGrowthStage(pet.species, pet.variant, pet.growthStage)}
+                alt={`${pet.name} - ${pet.growthStage}`}
+                className="pet-face"
+                onError={() => setImageError(true)}
+              />
             )}
             <div className="pet-caption">
               <div className="pet-name">{pet.name}</div>
-              <div className="pet-mood">😊 {moodText}</div>
+              <div className="pet-mood">{moodEmoji} {moodText}</div>
               <div className="pet-badge">Nivo {pet.level} · {pet.xp} XP</div>
             </div>
           </div>

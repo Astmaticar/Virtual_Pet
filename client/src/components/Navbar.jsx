@@ -51,7 +51,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-shell">
         <Link className="navbar-brand" to="/">
-          Virtualni ljubimac
+          <img src="/favicon.jpg" alt="Virtualni ljubimac" className="navbar-logo" />
         </Link>
 
         <div className="navbar-actions">

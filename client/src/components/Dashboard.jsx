@@ -28,25 +28,6 @@ const DashboardContent = () => {
 
   return (
     <div className="dashboard-wrapper">
-      <div className="weather-widget">
-        <div>
-          <strong>Vrijeme</strong>
-        </div>
-        {weather ? (
-          <div className="weather-details">
-            <span>{Math.round(weather.temperature)}°C</span>
-            <span>{weather.description}</span>
-          </div>
-        ) : weatherLoading ? (
-          <div className="weather-details">
-            <span>Učitavanje...</span>
-          </div>
-        ) : (
-          <div className="weather-details">
-            <span>{weatherError || 'Ne mogu dohvatiti vrijeme.'}</span>
-          </div>
-        )}
-      </div>
       <div className="dashboard-scene-panel" data-scene={effectiveIsDay ? 'day' : 'night'}>
         <PetDisplay weatherCondition={effectiveCondition} isDay={effectiveIsDay} />
         {pet?.isRunAway && <PetRunAwayScreen />}
@@ -54,7 +35,7 @@ const DashboardContent = () => {
       </div>
       {weather && (
         (weatherCondition === 'Rain' || weatherCondition === 'Drizzle' || weatherCondition === 'Thunderstorm' || weatherCondition === 'Snow' || !isDay)
-      ) && <div className="weather-note">Vrijeme je danas promjenjivo, pa je scena prilagođena nebu.</div>}
+      )}
       <div className="dashboard-stats-panel">
         <PetStats />
       </div>
