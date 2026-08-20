@@ -83,8 +83,8 @@ const getMoodEmoji = (mood) => {
 
 const getPetImageByGrowthStage = (species, variant, growthStage) => {
   // Vraća path do slike ljubimca na temelju vrste, boje i faze rasta
-  // Očekivane datoteke: /src/assets/pets/{species}-{variant}-{baby/child/adult}.png
-  return `/src/assets/pets/${species}-${variant}-${growthStage}.png`;
+  // Očekivane datoteke: /pets/{species}-{variant}-{baby/child/adult}.png
+  return `/pets/${species}-${variant}-${growthStage}.png`;
 };
 
 const PetDisplay = ({ weatherCondition, isDay = true }) => {

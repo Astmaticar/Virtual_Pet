@@ -1,0 +1,138 @@
+.dead-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dead-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+}
+
+.dead-device-frame {
+  position: relative;
+  z-index: 1001;
+  width: min(92%, 480px);
+  padding: 12px;
+  border: 12px solid #fffdf7;
+  border-radius: 32px;
+  background: linear-gradient(145deg, #fffdf7 0%, #fff5e8 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.dead-container {
+  position: relative;
+  width: 100%;
+  padding: 32px;
+  border: 3px solid #ff5c8a;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #ffd6e8 0%, #fff0f7 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  animation: dead-pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dead-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dead-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.dead-icon {
+  margin-bottom: 12px;
+  font-size: 4rem;
+}
+
+.dead-title {
+  margin: 0;
+  color: #ff5c8a;
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.dead-message {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-left: 4px solid #ff5c8a;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.dead-message p {
+  margin: 0;
+  color: #333;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.dead-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.dead-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #9c9c9c 0%, #c0c0c0 100%);
+  box-shadow: 0 6px 0 #696969;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Fredoka', 'Baloo 2', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dead-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.dead-button-emoji {
+  font-size: 1.2rem;
+}
+
+.dead-button-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .dead-device-frame {
+    border-width: 8px;
+  }
+
+  .dead-container {
+    padding: 24px;
+  }
+
+  .dead-title {
+    font-size: 1.5rem;
+  }
+
+  .dead-icon {
+    font-size: 3rem;
+  }
+}

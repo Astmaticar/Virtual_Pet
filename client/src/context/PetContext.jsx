@@ -18,6 +18,7 @@ const buildLocalWeatherFallback = () => {
 
 export const PetProvider = ({ children }) => {
   const [pet, setPet] = useState(null);
+  const [petIsDead, setPetIsDead] = useState(false);
   const [petExists, setPetExists] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -36,11 +37,13 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.get('/pet');
       setPet(response.data);
+      setPetIsDead(Boolean(response.data.isDead));
       setPetExists(true);
     } catch (err) {
       const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
 
       setPet(null);
+      setPetIsDead(false);
       setPetExists(!missingPet ? false : false);
 
       if (!missingPet) {
@@ -56,12 +59,14 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.get('/pet');
       setPet(response.data);
+      setPetIsDead(Boolean(response.data.isDead));
       setPetExists(true);
       // Ne postavljamo error jer je polling u pozadini
     } catch (err) {
       const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
       if (missingPet) {
         setPet(null);
+        setPetIsDead(false);
         setPetExists(false);
       }
       // Ne postavljamo error za polling - tiho ispod
@@ -114,6 +119,7 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.post('/pet', { name, species, variant, gender });
       setPet(response.data);
+      setPetIsDead(false);
       setPetExists(true);
       return { success: true };
     } catch (err) {
@@ -132,6 +138,7 @@ export const PetProvider = ({ children }) => {
     try {
       const response = await api.put(`/pet/${action}`);
       setPet(response.data);
+      setPetIsDead(Boolean(response.data.isDead));
 
       // Provjera je li došlo do evolucije
       if (response.data.hasEvolved && response.data.newStage) {
@@ -155,23 +162,6 @@ export const PetProvider = ({ children }) => {
   const clean = () => runAction('clean');
   const play = () => runAction('play');
 
-  const forgivePet = async () => {
-    setActionLoading(true);
-    setError(null);
-
-    try {
-      const response = await api.put('/pet/forgive');
-      setPet(response.data.pet);
-      return { success: true, message: response.data.message };
-    } catch (err) {
-      const message = err.response?.data?.message || 'Ne mogu oprostiti ljubimcu.';
-      setError(message);
-      return { success: false, message };
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const deletePet = async () => {
     setActionLoading(true);
     setError(null);
@@ -179,6 +169,7 @@ export const PetProvider = ({ children }) => {
     try {
       await api.delete('/pet');
       setPet(null);
+      setPetIsDead(false);
       setPetExists(false);
       return { success: true };
     } catch (err) {
@@ -193,6 +184,7 @@ export const PetProvider = ({ children }) => {
   return (
     <PetContext.Provider value={{
       pet,
+      petIsDead,
       petExists,
       loading,
       error,
@@ -207,7 +199,6 @@ export const PetProvider = ({ children }) => {
       feed,
       clean,
       play,
-      forgivePet,
       deletePet,
       createPet,
       fetchPet,

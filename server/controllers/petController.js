@@ -1,6 +1,10 @@
 const Pet = require('../models/Pet');
 const { calculateDecay } = require('../utils/statDecay');
 
+const isPetDead = (pet) => (
+  pet.hunger <= 0 && pet.cleanliness <= 0 && pet.happiness <= 0
+);
+
 // Pomoćna funkcija za ažuriranje faze rasta na temelju levela
 const updateGrowthStage = (pet) => {
   const oldStage = pet.growthStage;
@@ -50,25 +54,12 @@ exports.getPet = async (req, res) => {
     pet.cleanliness = decayResult.cleanliness;
     pet.happiness = decayResult.happiness;
     pet.energy = decayResult.energy;
-    pet.isRunAway = decayResult.isRunAway;
-    pet.criticalSince = decayResult.criticalSince;
-    if (decayResult.growthStageBeforeRunAway) {
-      pet.growthStageBeforeRunAway = decayResult.growthStageBeforeRunAway;
-    }
 
     pet.lastUpdated = new Date();
 
     await pet.save();
 
-    if (pet.isRunAway) {
-      return res.status(200).json({
-        ...pet.toObject(),
-        isRunAway: true,
-        message: 'Tvoj ljubimac je pobjegao jer je bio zanemaren 😢',
-      });
-    }
-
-    res.status(200).json(pet);
+    res.status(200).json({ ...pet.toObject(), isDead: decayResult.isDead });
   } catch (error) {
     console.error('Get pet error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
@@ -137,8 +128,8 @@ exports.feedPet = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
 
-    if (pet.isRunAway) {
-      return res.status(400).json({ success: false, isRunAway: true, message: 'Pozovi ga prvo nazad! 🐕📞' });
+    if (isPetDead(pet)) {
+      return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
     }
 
     const prevHunger = typeof pet.hunger === 'number' ? pet.hunger : 0;
@@ -180,8 +171,8 @@ exports.cleanPet = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
 
-    if (pet.isRunAway) {
-      return res.status(400).json({ success: false, isRunAway: true, message: 'Pozovi ga prvo nazad! 🐕📞' });
+    if (isPetDead(pet)) {
+      return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
     }
 
     const prevClean = typeof pet.cleanliness === 'number' ? pet.cleanliness : 0;
@@ -223,8 +214,8 @@ exports.playWithPet = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
 
-    if (pet.isRunAway) {
-      return res.status(400).json({ success: false, isRunAway: true, message: 'Pozovi ga prvo nazad! 🐕📞' });
+    if (isPetDead(pet)) {
+      return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
     }
 
     if (typeof pet.energy === 'number' && pet.energy <= 0) {
@@ -274,39 +265,4 @@ exports.deletePet = async (req, res) => {
   }
 };
 
-exports.forgivePet = async (req, res) => {
-  try {
-    const pet = await Pet.findOne({ owner: req.user });
-
-    if (!pet) {
-      return res.status(404).json({ success: false, message: 'Pet not found' });
-    }
-
-    if (!pet.isRunAway) {
-      return res.status(400).json({ success: false, message: 'Ljubimac nije pobjegao' });
-    }
-
-    pet.hunger = 50;
-    pet.cleanliness = 50;
-    pet.happiness = 50;
-
-    pet.growthStage = pet.growthStageBeforeRunAway || 'baby';
-
-    pet.isRunAway = false;
-    pet.criticalSince = null;
-    pet.growthStageBeforeRunAway = null;
-    pet.lastUpdated = new Date();
-
-    await pet.save();
-
-    return res.status(200).json({
-      success: true,
-      message: `💔 ${pet.name} se vratio kući! Trebam brinu, ali malo smo se pomirili... 🐕💕`,
-      pet,
-    });
-  } catch (error) {
-    console.error('Forgive pet error:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
 

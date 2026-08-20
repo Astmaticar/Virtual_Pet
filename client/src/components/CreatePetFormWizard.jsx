@@ -12,16 +12,34 @@ const SPECIES_LABELS = {
   rabbit: 'Zec',
 };
 
+const DEFAULT_VARIANT_BY_SPECIES = {
+  dog: 'brown',
+  cat: 'gray',
+  bird: 'blue',
+  rabbit: 'white',
+};
+
 const getPetImage = (species, size = 'large') => {
   const sizeClass = size === 'small' ? 'wizard-pet-image-small' : 'wizard-pet-image';
   return (
     <img
-      src={`/src/assets/pets/${species}.png`}
+      src={`/pets/${species}-${DEFAULT_VARIANT_BY_SPECIES[species]}-adult.png`}
       alt={SPECIES_LABELS[species]}
       className={sizeClass}
       loading="lazy"
     />
   );
+};
+
+const getFallbackEmoji = (species) => {
+  const emojiMap = {
+    dog: '🐶',
+    cat: '🐱',
+    bird: '🐦',
+    rabbit: '🐰',
+  };
+
+  return emojiMap[species] || '🐾';
 };
 
 const VARIANTS_BY_SPECIES = {
@@ -42,19 +60,6 @@ const VARIANT_LABELS = {
   yellow: 'Žuta',
   green: 'Zelena',
   red: 'Crvena',
-};
-
-const COLOR_MAP = {
-  brown: '#8B4513',
-  black: '#2C2C2C',
-  white: '#F5F5F5',
-  golden: '#FFD700',
-  gray: '#A9A9A9',
-  orange: '#FF8C00',
-  blue: '#4169E1',
-  yellow: '#FFD700',
-  green: '#32CD32',
-  red: '#FF6347',
 };
 
 const GENDER_LABELS = {
@@ -81,6 +86,7 @@ const CreatePetFormWizard = () => {
   const [selectedVariant, setSelectedVariant] = useState('brown');
   const [selectedGender, setSelectedGender] = useState('male');
   const [petName, setPetName] = useState('');
+  const [variantImageError, setVariantImageError] = useState(false);
 
   // Navigacija kroz vrste (beskonačna petlja)
   const handleSpeciesChange = (direction) => {
@@ -98,6 +104,7 @@ const CreatePetFormWizard = () => {
 
     // Resetiraj varijantu na prvu dostupnu za novu vrstu
     setSelectedVariant(VARIANTS_BY_SPECIES[newSpecies][0]);
+    setVariantImageError(false);
   };
 
   // Navigacija kroz varijante (beskonačna petlja)
@@ -113,6 +120,7 @@ const CreatePetFormWizard = () => {
     }
 
     setSelectedVariant(variants[newIndex]);
+    setVariantImageError(false);
   };
 
   // Navigacija između koraka
@@ -200,11 +208,19 @@ const CreatePetFormWizard = () => {
 
                 <div
                   className="wizard-emoji-display variant-preview"
-                  style={{
-                    background: COLOR_MAP[selectedVariant],
-                  }}
                 >
-                  {getPetImage(selectedSpecies)}
+                  {variantImageError ? (
+                    <span className="wizard-emoji">{getFallbackEmoji(selectedSpecies)}</span>
+                  ) : (
+                    <img
+                      key={`${selectedSpecies}-${selectedVariant}-adult`}
+                      src={`/pets/${selectedSpecies}-${selectedVariant}-adult.png`}
+                      alt={`${VARIANT_LABELS[selectedVariant]} ${SPECIES_LABELS[selectedSpecies]}`}
+                      className="wizard-pet-image"
+                      loading="lazy"
+                      onError={() => setVariantImageError(true)}
+                    />
+                  )}
                 </div>
 
                 <button
@@ -255,11 +271,19 @@ const CreatePetFormWizard = () => {
               <div className="wizard-content">
                 <div
                   className="wizard-emoji-display variant-preview name-preview"
-                  style={{
-                    background: COLOR_MAP[selectedVariant],
-                  }}
                 >
-                  {getPetImage(selectedSpecies, 'small')}
+                  {variantImageError ? (
+                    <span className="wizard-emoji wizard-emoji-small">{getFallbackEmoji(selectedSpecies)}</span>
+                  ) : (
+                    <img
+                      key={`${selectedSpecies}-${selectedVariant}-adult-name`}
+                      src={`/pets/${selectedSpecies}-${selectedVariant}-adult.png`}
+                      alt={`${VARIANT_LABELS[selectedVariant]} ${SPECIES_LABELS[selectedSpecies]}`}
+                      className="wizard-pet-image-small"
+                      loading="lazy"
+                      onError={() => setVariantImageError(true)}
+                    />
+                  )}
                 </div>
 
                 <input
