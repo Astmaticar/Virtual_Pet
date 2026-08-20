@@ -11,7 +11,7 @@ Virtual Pet App je web aplikacija za brigu o virtualnom ljubimcu. Korisnik se re
 - XP i level sustav
 - Faze rasta ljubimca: baby, child, adult
 - Integracija vremenske prognoze koja utječe na vizualnu scenu (dan/noć, kiša/snijeg/oblačno)
-- Sustav bijega zanemarenog ljubimca i mogućnost opraštanja
+- Sustav umiranja ljubimca u slučaju zanemarivanja
 
 ## Tehnologije
 
