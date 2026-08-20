@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
@@ -26,6 +26,19 @@ const Navbar = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
   const [weather, setWeather] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navbarRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -41,20 +54,34 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
+    setIsMenuOpen(false);
     logout();
     navigate('/login');
   };
 
+  const handleMenuItemClick = () => setIsMenuOpen(false);
+
   const weatherDisplay = weather ? getWeatherIcon(weather.description, weather.temperature) : null;
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={navbarRef}>
       <div className="navbar-shell">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/" onClick={handleMenuItemClick}>
           <img src="/favicon.jpg" alt="Virtualni ljubimac" className="navbar-logo" />
+          <span className="navbar-brand-name">Virtualni ljubimac</span>
         </Link>
 
-        <div className="navbar-actions">
+        <button
+          type="button"
+          className="navbar-menu-toggle"
+          aria-label={isMenuOpen ? 'Zatvori izbornik' : 'Otvori izbornik'}
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+
+        <div className={`navbar-actions ${isMenuOpen ? 'is-open' : ''}`}>
           {weatherDisplay && (
             <div className="navbar-weather" title="Trenutno vrijeme">
               <span className="navbar-weather-icon">{weatherDisplay.icon}</span>
@@ -64,10 +91,10 @@ const Navbar = () => {
 
           {!token ? (
             <>
-              <Link className="navbar-link" to="/login">
+              <Link className="navbar-link" to="/login" onClick={handleMenuItemClick}>
                 Prijava
               </Link>
-              <Link className="navbar-link" to="/register">
+              <Link className="navbar-link" to="/register" onClick={handleMenuItemClick}>
                 Registracija
               </Link>
             </>
