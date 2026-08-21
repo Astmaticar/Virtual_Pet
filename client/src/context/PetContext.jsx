@@ -144,6 +144,7 @@ export const PetProvider = ({ children }) => {
       if (response.data.hasEvolved && response.data.newStage) {
         setEvolutionInfo({
           newStage: response.data.newStage,
+          species: response.data.species,
         });
 
         // Automatski zatvori overlay nakon 3 sekunde

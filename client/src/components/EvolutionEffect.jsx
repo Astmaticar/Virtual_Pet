@@ -4,6 +4,13 @@ import './EvolutionEffect.css';
 const EvolutionEffect = ({ evolutionInfo, onClose }) => {
   if (!evolutionInfo) return null;
 
+  const speciesEmojis = {
+    dog: '🐶',
+    cat: '🐱',
+    bird: '🐦',
+    rabbit: '🐰',
+  };
+
   const stageNames = {
     baby: 'mladunče 👶',
     child: 'mladić/mlada 👧',
@@ -11,6 +18,7 @@ const EvolutionEffect = ({ evolutionInfo, onClose }) => {
   };
 
   const stageName = stageNames[evolutionInfo.newStage] || evolutionInfo.newStage;
+  const petEmoji = speciesEmojis[evolutionInfo.species] || '🐾';
 
   useEffect(() => {
     // Automatski zatvori nakon 3 sekunde ako se prosljeđuje onClose
@@ -38,7 +46,7 @@ const EvolutionEffect = ({ evolutionInfo, onClose }) => {
 
           {/* Pet prikaz s animacijom */}
           <div className="evolution-pet-display">
-            <div className="evolution-pet-bounce">😺</div>
+            <div className="evolution-pet-bounce">{petEmoji}</div>
           </div>
 
           {/* Hint za zatvaranje */}
