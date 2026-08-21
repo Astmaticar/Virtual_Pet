@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../services/api';
+import { getWeatherLocation } from '../services/weatherLocation';
 
 const PetContext = createContext(null);
 
@@ -78,7 +79,8 @@ export const PetProvider = ({ children }) => {
     setWeatherError(null);
 
     try {
-      const response = await api.get('/weather');
+      const location = await getWeatherLocation();
+      const response = await api.get('/weather', { params: location || undefined });
       const weatherData = response.data;
 
       setWeather(weatherData);

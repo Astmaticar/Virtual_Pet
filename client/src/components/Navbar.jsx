@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { getWeatherLocation } from '../services/weatherLocation';
 import './Navbar.css';
 
 const getWeatherIcon = (description = '', temperature = 0) => {
@@ -43,7 +44,8 @@ const Navbar = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await api.get('/weather');
+        const location = await getWeatherLocation();
+        const response = await api.get('/weather', { params: location || undefined });
         setWeather(response.data);
       } catch (err) {
         setWeather(null);
