@@ -129,7 +129,7 @@ exports.feedPet = async (req, res) => {
     }
 
     if (isPetDead(pet)) {
-      return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
+      return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju, počni ispočetka' });
     }
 
     const prevHunger = typeof pet.hunger === 'number' ? pet.hunger : 0;

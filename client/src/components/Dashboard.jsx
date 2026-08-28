@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { PetProvider, usePet } from '../context/PetContext';
 import PetDisplay from './pet/PetDisplay';
 import PetStats from './pet/PetStats';
@@ -9,7 +8,7 @@ import EvolutionEffect from './EvolutionEffect';
 import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
-  const { pet, petExists, petIsDead, loading, weather, weatherCondition, isDay, weatherLoading, weatherError, evolutionInfo, setEvolutionInfo } = usePet();
+  const { petExists, petIsDead, loading, weather, weatherCondition, isDay, evolutionInfo, setEvolutionInfo } = usePet();
 
   const effectiveIsDay = isDay;
   const effectiveCondition = weatherCondition;

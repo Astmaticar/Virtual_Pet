@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import './EvolutionEffect.css';
 
 const EvolutionEffect = ({ evolutionInfo, onClose }) => {
-  if (!evolutionInfo) return null;
-
   const speciesEmojis = {
     dog: '🐶',
     cat: '🐱',
@@ -17,14 +15,17 @@ const EvolutionEffect = ({ evolutionInfo, onClose }) => {
     adult: 'odrastao 🎓',
   };
 
-  const stageName = stageNames[evolutionInfo.newStage] || evolutionInfo.newStage;
-  const petEmoji = speciesEmojis[evolutionInfo.species] || '🐾';
-
   useEffect(() => {
-    // Automatski zatvori nakon 3 sekunde ako se prosljeđuje onClose
+    if (!evolutionInfo) return undefined;
+
     const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [evolutionInfo, onClose]);
+
+  if (!evolutionInfo) return null;
+
+  const stageName = stageNames[evolutionInfo.newStage] || evolutionInfo.newStage;
+  const petEmoji = speciesEmojis[evolutionInfo.species] || '🐾';
 
   return (
     <div className="evolution-overlay" onClick={onClose}>

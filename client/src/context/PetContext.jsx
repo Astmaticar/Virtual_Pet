@@ -55,14 +55,12 @@ export const PetProvider = ({ children }) => {
     }
   };
 
-  // Tiho ažuriranje - bez loading state-a, koristi se za polling
   const pollPet = async () => {
     try {
       const response = await api.get('/pet');
       setPet(response.data);
       setPetIsDead(Boolean(response.data.isDead));
       setPetExists(true);
-      // Ne postavljamo error jer je polling u pozadini
     } catch (err) {
       const missingPet = err.response?.status === 404 || err.response?.data?.message?.toLowerCase().includes('pet not found');
       if (missingPet) {
@@ -70,7 +68,6 @@ export const PetProvider = ({ children }) => {
         setPetIsDead(false);
         setPetExists(false);
       }
-      // Ne postavljamo error za polling - tiho ispod
     }
   };
 
@@ -107,7 +104,7 @@ export const PetProvider = ({ children }) => {
   useEffect(() => {
     const pollInterval = setInterval(() => {
       pollPet();
-    }, 30000); // 30 sekundi
+    }, 30000);
 
     return () => {
       clearInterval(pollInterval);

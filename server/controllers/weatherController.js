@@ -2,6 +2,14 @@ const axios = require('axios');
 
 exports.getWeather = async (req, res) => {
   try {
+    const latitude = Number(req.query.lat);
+    const longitude = Number(req.query.lon);
+    const hasCoordinates = Number.isFinite(latitude)
+      && Number.isFinite(longitude)
+      && latitude >= -90
+      && latitude <= 90
+      && longitude >= -180
+      && longitude <= 180;
     const city = req.query.city || 'Zagreb';
     const apiKey = process.env.WEATHER_API_KEY;
 
@@ -10,11 +18,9 @@ exports.getWeather = async (req, res) => {
     }
 
     const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-      params: {
-        q: city,
-        appid: apiKey,
-        units: 'metric',
-      },
+      params: hasCoordinates
+        ? { lat: latitude, lon: longitude, appid: apiKey, units: 'metric' }
+        : { q: city, appid: apiKey, units: 'metric' },
     });
 
     const weatherData = response.data;

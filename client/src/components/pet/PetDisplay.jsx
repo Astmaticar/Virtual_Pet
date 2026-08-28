@@ -129,7 +129,7 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
   const showNight = isDay === false;
   const showRain = weatherType === 'rain' || weatherType === 'drizzle' || weatherType === 'thunderstorm';
   const showSnow = weatherType === 'snow';
-  const showClouds = true; // Pokazuj oblake za sve vremenske uvjete - čak i za vedro
+  const showClouds = true;
   const rainCount = getRainCount(weatherCondition);
   const snowCount = getSnowCount();
 
