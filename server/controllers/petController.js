@@ -73,9 +73,9 @@ exports.createPet = async (req, res) => {
     const validSpecies = ['dog', 'cat', 'bird', 'rabbit'];
     const validGenders = ['male', 'female'];
     const validVariantsBySpecies = {
-      dog: ['brown', 'black', 'white', 'golden'],
-      cat: ['gray', 'black', 'white', 'orange'],
-      bird: ['blue', 'yellow', 'green', 'red'],
+      dog: ['gray', 'white', 'brown', 'black'],
+      cat: ['calico', 'tuxedo', 'white', 'tubby'],
+      bird: ['yellow', 'blue', 'green', 'red'],
       rabbit: ['white', 'brown', 'gray', 'black'],
     };
 
@@ -111,6 +111,10 @@ exports.createPet = async (req, res) => {
       species,
       variant,
       gender,
+      hunger: 50,
+      cleanliness: 50,
+      happiness: 50,
+      energy: 100,
     });
 
     res.status(201).json({ success: true, ...pet.toObject() });
@@ -130,6 +134,11 @@ exports.feedPet = async (req, res) => {
 
     if (isPetDead(pet)) {
       return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju, počni ispočetka' });
+    }
+
+    const hungerValue = Math.round(typeof pet.hunger === 'number' ? pet.hunger : 0);
+    if (hungerValue >= 100) {
+      return res.status(400).json({ success: false, message: 'Ljubimac nije gladan, ne treba više hrane' });
     }
 
     const prevHunger = typeof pet.hunger === 'number' ? pet.hunger : 0;
@@ -175,6 +184,11 @@ exports.cleanPet = async (req, res) => {
       return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
     }
 
+    const cleanlinessValue = Math.round(typeof pet.cleanliness === 'number' ? pet.cleanliness : 0);
+    if (cleanlinessValue >= 100) {
+      return res.status(400).json({ success: false, message: 'Ljubimac je već čist i ne treba više čišćenja' });
+    }
+
     const prevClean = typeof pet.cleanliness === 'number' ? pet.cleanliness : 0;
     const newClean = Math.min(100, prevClean + 25);
 
@@ -218,10 +232,12 @@ exports.playWithPet = async (req, res) => {
       return res.status(400).json({ success: false, isDead: true, message: 'Tvoj ljubimac treba tvoju pažnju odmah, ili počni ispočetka' });
     }
 
-    if (typeof pet.energy === 'number' && pet.energy <= 0) {
+    const energyValue = Math.round(typeof pet.energy === 'number' ? pet.energy : 0);
+    if (energyValue <= 0) {
       return res.status(400).json({ success: false, message: 'Ljubimac je premoren za igru, pusti ga da se odmori' });
     }
 
+    const previousHappiness = pet.happiness;
     pet.happiness = Math.min(100, pet.happiness + 20);
     pet.energy = Math.max(0, pet.energy - 10);
     pet.lastUpdated = new Date();
@@ -233,6 +249,7 @@ exports.playWithPet = async (req, res) => {
     const response = {
       ...pet.toObject(),
       leveledUp: levelUpResult.leveledUp,
+      happinessChanged: pet.happiness > previousHappiness,
     };
 
     if (levelUpResult.evolution && levelUpResult.evolution.hasEvolved) {

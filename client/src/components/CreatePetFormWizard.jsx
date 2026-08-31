@@ -13,9 +13,9 @@ const SPECIES_LABELS = {
 };
 
 const DEFAULT_VARIANT_BY_SPECIES = {
-  dog: 'brown',
-  cat: 'gray',
-  bird: 'blue',
+  dog: 'gray',
+  cat: 'calico',
+  bird: 'yellow',
   rabbit: 'white',
 };
 
@@ -43,23 +43,24 @@ const getFallbackEmoji = (species) => {
 };
 
 const VARIANTS_BY_SPECIES = {
-  dog: ['brown', 'black', 'white', 'golden'],
-  cat: ['gray', 'black', 'white', 'orange'],
-  bird: ['blue', 'yellow', 'green', 'red'],
+  dog: ['gray', 'brown', 'black', 'white'],
+  cat: ['calico', 'tuxedo', 'white', 'tubby'],
+  bird: ['yellow', 'blue', 'green', 'red'],
   rabbit: ['white', 'brown', 'gray', 'black'],
 };
 
 const VARIANT_LABELS = {
+  gray: 'Sivi',
   brown: 'Smeđi',
   black: 'Crni',
   white: 'Bijeli',
-  golden: 'Zlatni',
-  gray: 'Sivi',
-  orange: 'Narančasti',
+  calico: 'Calico',
   blue: 'Plava',
   yellow: 'Žuta',
   green: 'Zelena',
   red: 'Crvena',
+  tuxedo: 'Tuxedo',
+  tubby: 'Tubby',
 };
 
 const GENDER_LABELS = {
@@ -83,7 +84,7 @@ const CreatePetFormWizard = () => {
   // State za sve korake
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedSpecies, setSelectedSpecies] = useState('dog');
-  const [selectedVariant, setSelectedVariant] = useState('brown');
+  const [selectedVariant, setSelectedVariant] = useState('gray');
   const [selectedGender, setSelectedGender] = useState('male');
   const [petName, setPetName] = useState('');
   const [variantImageError, setVariantImageError] = useState(false);
@@ -195,7 +196,7 @@ const CreatePetFormWizard = () => {
           {/* KORAK 2 - Odabir varijante */}
           {currentStep === 2 && (
             <div className="wizard-step step-variant">
-              <h2 className="wizard-title">Odaberi boju</h2>
+              <h2 className="wizard-title">Odaberi varijantu</h2>
               <div className="wizard-content">
                 <button
                   className="wizard-arrow-btn wizard-arrow-prev"

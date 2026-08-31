@@ -2,24 +2,28 @@ import { usePet } from '../../context/PetContext';
 import './ActionButtons.css';
 
 const ActionButtons = () => {
-  const { feed, clean, play, actionLoading } = usePet();
+  const { pet, feed, clean, play, actionLoading } = usePet();
+
+  const feedDisabled = actionLoading || !pet || Math.round(pet.hunger) >= 100;
+  const cleanDisabled = actionLoading || !pet || Math.round(pet.cleanliness) >= 100;
+  const playDisabled = actionLoading || !pet || Math.round(pet.energy) <= 0;
 
   return (
     <div className="action-buttons">
       <div className="action-item">
-        <button type="button" onClick={feed} disabled={actionLoading} aria-label="Nahrani ljubimca">
+        <button type="button" onClick={feed} disabled={feedDisabled} aria-label="Nahrani ljubimca">
           <span aria-hidden="true">🍖</span>
         </button>
         <span className="action-label">Nahrani</span>
       </div>
       <div className="action-item">
-        <button type="button" onClick={clean} disabled={actionLoading} aria-label="Očisti ljubimca">
+        <button type="button" onClick={clean} disabled={cleanDisabled} aria-label="Očisti ljubimca">
           <span aria-hidden="true">🧼</span>
         </button>
         <span className="action-label">Očisti</span>
       </div>
       <div className="action-item">
-        <button type="button" onClick={play} disabled={actionLoading} aria-label="Igraj se s ljubimcem">
+        <button type="button" onClick={play} disabled={playDisabled} aria-label="Igraj se s ljubimcem">
           <span aria-hidden="true">🎾</span>
         </button>
         <span className="action-label">Igraj se</span>

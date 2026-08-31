@@ -28,19 +28,19 @@ const petSchema = new mongoose.Schema({
     type: Number,
     min: 0,
     max: 100,
-    default: 100,
+    default: 50,
   },
   cleanliness: {
     type: Number,
     min: 0,
     max: 100,
-    default: 100,
+    default: 50,
   },
   happiness: {
     type: Number,
     min: 0,
     max: 100,
-    default: 100,
+    default: 50,
   },
   energy: {
     type: Number,

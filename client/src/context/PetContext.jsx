@@ -9,7 +9,7 @@ const buildLocalWeatherFallback = () => {
   const isDayFallback = hour >= 6 && hour < 20;
 
   return {
-    city: 'Zagreb',
+    city: 'Osijek',
     temperature: isDayFallback ? 23 : 16,
     description: isDayFallback ? 'clear sky' : 'few clouds',
     condition: isDayFallback ? 'Clear' : 'Clouds',
@@ -154,7 +154,7 @@ export const PetProvider = ({ children }) => {
       const previousEnergy = oldPet?.energy;
       const hasEnoughEnergy = action !== 'play' || (typeof previousEnergy === 'number' ? previousEnergy > 0 : true);
 
-      const statChanged = Boolean(
+      const statImproved = Boolean(
         targetStat &&
         typeof previousTargetValue === 'number' &&
         typeof newTargetValue === 'number' &&
@@ -167,10 +167,15 @@ export const PetProvider = ({ children }) => {
         (!targetStat || typeof previousTargetValue === 'number')
       );
 
-      const shouldShowEffect = Boolean(actionAllowed && response.data && !response.data.isDead);
+      // Prikaži efekt kada je akcija bila dopuštena i uspješno provedena.
+      // Za play, efekt se prikazuje i kada je happiness već na 100, jer se i dalje troši energija.
+      const shouldShowEffect = Boolean(
+        actionAllowed &&
+        response.data &&
+        !response.data.isDead &&
+        (action === 'play' || statImproved)
+      );
 
-      // Prikaži efekt samo ako je akcija bila dopuštena prema logici aplikacije.
-      // Ne ograničavamo play po happiness = 100 jer aplikacija dopušta igru i dalje.
       if (shouldShowEffect) {
         if (actionEffectTimeoutRef.current) {
           clearTimeout(actionEffectTimeoutRef.current);
