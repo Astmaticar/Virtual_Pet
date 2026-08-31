@@ -13,7 +13,7 @@ const PetStats = () => {
   }
 
   const stats = [
-    { label: 'Hunger', value: pet.hunger },
+    { label: 'Glad', value: pet.hunger },
     { label: 'Čistoća', value: pet.cleanliness },
     { label: 'Sreća', value: pet.happiness },
     { label: 'Energija', value: pet.energy },

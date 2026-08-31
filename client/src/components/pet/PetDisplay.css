@@ -270,7 +270,7 @@
 
 .pet-flower {
   left: 20px;
-  bottom: 70px;
+  bottom: 122px;
   width: 34px;
   height: 34px;
 }
@@ -298,7 +298,7 @@
 
 .pet-rock {
   right: 24px;
-  bottom: 78px;
+  bottom: 118px;
   width: 42px;
   height: 26px;
   border-radius: 999px 999px 16px 16px;
@@ -309,7 +309,7 @@
 .pet-figure-wrap {
   position: absolute;
   left: 50%;
-  bottom: 56px;
+  bottom: 20px;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -321,15 +321,15 @@
 }
 
 .pet-display.growth-baby .pet-figure-wrap {
-  transform: translateX(-50%) scale(0.6) translateY(20px);
+  transform: translateX(-50%) scale(0.8) translateY(0);
 }
 
 .pet-display.growth-child .pet-figure-wrap {
-  transform: translateX(-50%) scale(0.85) translateY(10px);
+  transform: translateX(-50%) scale(1) translateY(0);
 }
 
 .pet-display.growth-adult .pet-figure-wrap {
-  transform: translateX(-50%) scale(1.1);
+  transform: translateX(-50%) scale(1.3) translateY(0);
 }
 
 .pet-shadow {
@@ -342,33 +342,81 @@
 }
 
 .pet-face {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 138px;
-  height: 138px;
+  display: block;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fffbe5 0%, #ffd98c 52%, #ffb85c 100%);
-  font-size: 4.7rem;
-  box-shadow: inset 0 -8px 12px rgba(168, 92, 0, 0.16), 0 12px 18px rgba(120, 80, 40, 0.16);
-  object-fit: contain;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  object-fit: cover;
   object-position: center;
-  padding: 8px;
+  padding: 0;
   flex-shrink: 0;
+  image-rendering: pixelated;
+  -webkit-image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
 }
 
 .pet-face-emoji {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 138px;
-  height: 138px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
+  overflow: hidden;
   background: radial-gradient(circle at 30% 30%, #fffbe5 0%, #ffd98c 52%, #ffb85c 100%);
-  font-size: 4.7rem;
-  box-shadow: inset 0 -8px 12px rgba(168, 92, 0, 0.16), 0 12px 18px rgba(120, 80, 40, 0.16);
+  font-size: 5.2rem;
+  box-shadow: inset 0 -4px 8px rgba(168, 92, 0, 0.12), 0 8px 12px rgba(120, 80, 40, 0.12);
   flex-shrink: 0;
 }
+
+.pet-display.growth-baby .pet-face,
+.pet-display.growth-baby .pet-face-emoji {
+  width: 120px;
+  height: 120px;
+}
+
+.pet-display.growth-baby .pet-face {
+  object-fit: cover;
+}
+
+.pet-display.growth-baby .pet-face-emoji {
+  font-size: 4rem;
+}
+
+.pet-display.growth-child .pet-face,
+.pet-display.growth-child .pet-face-emoji {
+  width: 160px;
+  height: 160px;
+}
+
+.pet-display.growth-child .pet-face {
+  object-fit: cover;
+}
+
+.pet-display.growth-child .pet-face-emoji {
+  font-size: 5.2rem;
+}
+
+.pet-display.growth-adult .pet-face,
+.pet-display.growth-adult .pet-face-emoji {
+  width: 210px;
+  height: 210px;
+}
+
+.pet-display.growth-adult .pet-face {
+  object-fit: cover;
+}
+
+.pet-display.growth-adult .pet-face-emoji {
+  font-size: 6.6rem;
+}
+
 
 .pet-caption {
   margin-top: 10px;
@@ -404,7 +452,7 @@
 .pet-ground {
   position: absolute;
   inset: auto 0 0 0;
-  height: 42%;
+  height: 46%;
   pointer-events: none;
 }
 
@@ -413,7 +461,7 @@
   left: -3%;
   right: -3%;
   bottom: 0;
-  height: 112px;
+  height: 156px;
   border-radius: 48% 48% 0 0;
   background: linear-gradient(180deg, #7ed957 0%, #5fbf4a 100%);
   box-shadow: inset 0 10px 0 rgba(255, 255, 255, 0.12);
@@ -421,7 +469,7 @@
 
 .pet-grass-blade {
   position: absolute;
-  bottom: 70px;
+  bottom: 90px;
   width: 12px;
   height: 34px;
   border-radius: 999px;
@@ -463,7 +511,7 @@
   left: 50%;
   bottom: 18px;
   transform: translateX(-50%);
-  width: 280px;
+  width: 300px;
   height: 44px;
   border-radius: 999px;
   background: linear-gradient(180deg, #72d44f 0%, #53b63f 100%);
@@ -478,7 +526,7 @@
   }
 
   50% {
-    transform: translateX(-50%) translateY(-7px);
+    transform: translateX(-50%) translateY(-6px);
   }
 }
 

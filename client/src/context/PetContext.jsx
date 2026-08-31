@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import api from '../services/api';
 import { getWeatherLocation } from '../services/weatherLocation';
 
@@ -30,6 +30,8 @@ export const PetProvider = ({ children }) => {
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
   const [evolutionInfo, setEvolutionInfo] = useState(null);
+  const [actionEffect, setActionEffect] = useState(null);
+  const actionEffectTimeoutRef = useRef(null);
 
   const fetchPet = async () => {
     setLoading(true);
@@ -135,9 +137,51 @@ export const PetProvider = ({ children }) => {
     setError(null);
 
     try {
+      const oldPet = pet;
       const response = await api.put(`/pet/${action}`);
       setPet(response.data);
       setPetIsDead(Boolean(response.data.isDead));
+      
+      const actionStatMap = {
+        feed: 'hunger',
+        clean: 'cleanliness',
+        play: 'happiness',
+      };
+
+      const targetStat = actionStatMap[action];
+      const previousTargetValue = oldPet?.[targetStat];
+      const newTargetValue = response.data?.[targetStat];
+      const previousEnergy = oldPet?.energy;
+      const hasEnoughEnergy = action !== 'play' || (typeof previousEnergy === 'number' ? previousEnergy > 0 : true);
+
+      const statChanged = Boolean(
+        targetStat &&
+        typeof previousTargetValue === 'number' &&
+        typeof newTargetValue === 'number' &&
+        newTargetValue > previousTargetValue
+      );
+
+      const actionAllowed = Boolean(
+        action &&
+        hasEnoughEnergy &&
+        (!targetStat || typeof previousTargetValue === 'number')
+      );
+
+      const shouldShowEffect = Boolean(actionAllowed && response.data && !response.data.isDead);
+
+      // Prikaži efekt samo ako je akcija bila dopuštena prema logici aplikacije.
+      // Ne ograničavamo play po happiness = 100 jer aplikacija dopušta igru i dalje.
+      if (shouldShowEffect) {
+        if (actionEffectTimeoutRef.current) {
+          clearTimeout(actionEffectTimeoutRef.current);
+        }
+
+        setActionEffect(null);
+        actionEffectTimeoutRef.current = setTimeout(() => {
+          setActionEffect(action);
+          actionEffectTimeoutRef.current = setTimeout(() => setActionEffect(null), 1500);
+        }, 0);
+      }
 
       // Provjera je li došlo do evolucije
       if (response.data.hasEvolved && response.data.newStage) {
@@ -196,6 +240,8 @@ export const PetProvider = ({ children }) => {
       weatherError,
       evolutionInfo,
       setEvolutionInfo,
+      actionEffect,
+      setActionEffect,
       feed,
       clean,
       play,

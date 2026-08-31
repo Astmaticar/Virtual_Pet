@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePet } from '../../context/PetContext';
 import './PetDisplay.css';
+import CareEffect from './CareEffect';
 
 const getSceneVariant = (condition, isDay) => {
   const normalizedCondition = (condition || 'Clear').toLowerCase();
@@ -263,6 +264,8 @@ const PetDisplay = ({ weatherCondition, isDay = true }) => {
             <div className="pet-grass-blade pet-grass-blade-d" />
             <div className="pet-platform" />
           </div>
+          
+          <CareEffect />
         </div>
       </div>
     </div>

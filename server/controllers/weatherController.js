@@ -10,7 +10,7 @@ exports.getWeather = async (req, res) => {
       && latitude <= 90
       && longitude >= -180
       && longitude <= 180;
-    const city = req.query.city || 'Zagreb';
+    const city = req.query.city || 'Osijek';
     const apiKey = process.env.WEATHER_API_KEY;
 
     if (!apiKey) {

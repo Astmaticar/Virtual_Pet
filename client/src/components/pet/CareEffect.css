@@ -1,0 +1,90 @@
+.care-effect-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 24px;
+  z-index: 3;
+}
+
+.care-effect-particle {
+  position: absolute;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: particle-float 1.2s ease-out forwards;
+  transform-origin: center center;
+}
+
+/* Hearts - feed */
+.care-effect-particle.heart {
+  animation: heart-float 1.2s ease-out forwards;
+  font-size: 1.3rem;
+}
+
+@keyframes heart-float {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 0), -35px) scale(0.6);
+  }
+}
+
+/* Sparkles - play */
+.care-effect-particle.sparkle {
+  animation: sparkle-pop 1.2s ease-out forwards;
+  font-size: 1.2rem;
+}
+
+@keyframes sparkle-pop {
+  0% {
+    opacity: 1;
+    transform: scale(0.4) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(180deg) translateY(-40px);
+  }
+}
+
+/* Bubbles - clean */
+.care-effect-particle.bubble {
+  animation: bubble-rise 1.2s ease-out forwards;
+  font-size: 1.2rem;
+}
+
+@keyframes bubble-rise {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-38px) translateX(10px) scale(0.5);
+  }
+}
+
+@keyframes particle-float {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.5);
+  }
+}
