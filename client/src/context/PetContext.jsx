@@ -29,6 +29,8 @@ export const PetProvider = ({ children }) => {
   const [isDay, setIsDay] = useState(true);
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
+  const [weatherOverride, setWeatherOverride] = useState(null);
+  const [dayOverride, setDayOverride] = useState(null);
   const [evolutionInfo, setEvolutionInfo] = useState(null);
   const [actionEffect, setActionEffect] = useState(null);
   const actionEffectTimeoutRef = useRef(null);
@@ -76,6 +78,8 @@ export const PetProvider = ({ children }) => {
   const fetchWeather = async () => {
     setWeatherLoading(true);
     setWeatherError(null);
+    setWeatherOverride(null);
+    setDayOverride(null);
 
     try {
       const location = await getWeatherLocation();
@@ -95,6 +99,16 @@ export const PetProvider = ({ children }) => {
     } finally {
       setWeatherLoading(false);
     }
+  };
+
+  const setWeatherPreset = (condition, isDayValue) => {
+    setWeatherOverride(condition);
+    setDayOverride(Boolean(isDayValue));
+  };
+
+  const resetWeatherPreset = () => {
+    setWeatherOverride(null);
+    setDayOverride(null);
   };
 
   useEffect(() => {
@@ -241,12 +255,16 @@ export const PetProvider = ({ children }) => {
       weather,
       weatherCondition,
       isDay,
+      weatherOverride,
+      dayOverride,
       weatherLoading,
       weatherError,
       evolutionInfo,
       setEvolutionInfo,
       actionEffect,
       setActionEffect,
+      setWeatherPreset,
+      resetWeatherPreset,
       feed,
       clean,
       play,
