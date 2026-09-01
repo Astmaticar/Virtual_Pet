@@ -12,19 +12,19 @@ const ActionButtons = () => {
     <div className="action-buttons">
       <div className="action-item">
         <button type="button" onClick={feed} disabled={feedDisabled} aria-label="Nahrani ljubimca">
-          <span aria-hidden="true">🍖</span>
+          <img src="/hamby.png" alt="Hamburger" className="action-button-image" />
         </button>
         <span className="action-label">Nahrani</span>
       </div>
       <div className="action-item">
         <button type="button" onClick={clean} disabled={cleanDisabled} aria-label="Očisti ljubimca">
-          <span aria-hidden="true">🧼</span>
+          <img src="/soap.png" alt="Soap" className="action-button-image" />
         </button>
         <span className="action-label">Očisti</span>
       </div>
       <div className="action-item">
         <button type="button" onClick={play} disabled={playDisabled} aria-label="Igraj se s ljubimcem">
-          <span aria-hidden="true">🎾</span>
+          <img src="/ball.png" alt="Ball" className="action-button-image" />
         </button>
         <span className="action-label">Igraj se</span>
       </div>

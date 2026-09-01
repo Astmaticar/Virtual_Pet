@@ -311,6 +311,7 @@
   left: 50%;
   bottom: 20px;
   transform: translateX(-50%);
+  transform-origin: bottom center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -667,6 +668,10 @@
     padding: 14px 14px 16px;
   }
 
+  .pet-figure-wrap {
+    bottom: 8px;
+  }
+
   .pet-face {
     width: 118px;
     height: 118px;
@@ -682,17 +687,69 @@
   .pet-platform {
     width: 220px;
     height: 38px;
+    bottom: 6px;
   }
 
   .pet-grass-band {
     height: 92px;
   }
 
+  .pet-grass-blade {
+    bottom: 53px;
+    width: 7px;
+    height: 20px;
+  }
+
+  .pet-flower {
+    bottom: 72px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .pet-rock {
+    bottom: 70px;
+    width: 28px;
+    height: 17px;
+  }
+
   .pet-shadow {
     width: 126px;
+    margin-bottom: -10px;
   }
 
   .pet-rain-drop {
     height: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .pet-grass-band {
+    height: 80px;
+  }
+
+  .pet-figure-wrap {
+    bottom: 4px;
+  }
+
+  .pet-platform {
+    bottom: 2px;
+  }
+
+  .pet-grass-blade {
+    bottom: 46px;
+    width: 6px;
+    height: 17px;
+  }
+
+  .pet-flower {
+    bottom: 62px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .pet-rock {
+    bottom: 60px;
+    width: 24px;
+    height: 15px;
   }
 }
