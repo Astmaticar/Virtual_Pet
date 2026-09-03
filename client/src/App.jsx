@@ -3,6 +3,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './components/Dashboard';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
+import ForgotPasswordForm from './components/auth/ForgotPasswordForm';
+import ResetPasswordForm from './components/auth/ResetPasswordForm';
 import Navbar from './components/Navbar';
 import PublicRoute from './components/PublicRoute';
 import './App.css';
@@ -34,6 +36,8 @@ function App() {
             />
             <Route path="/login" element={<PublicRoute><LoginForm /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><RegisterForm /></PublicRoute>} />
+            <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordForm /></PublicRoute>} />
+            <Route path="/reset-password/:token" element={<PublicRoute><ResetPasswordForm /></PublicRoute>} />
           </Routes>
         </main>
       </div>

@@ -59,13 +59,20 @@
   box-shadow: 0 6px 0 #c95f12;
 }
 
-.auth-form button:hover {
+.auth-form button:hover:not(:disabled) {
   transform: translateY(-1px);
 }
 
-.auth-form button:active {
+.auth-form button:active:not(:disabled) {
   transform: translateY(4px);
   box-shadow: 0 2px 0 #c95f12;
+}
+
+.auth-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 0 #a94f19;
 }
 
 .auth-error {
@@ -74,6 +81,14 @@
   background: #fff0f4;
   color: #a24d6b;
   border: 2px solid #f4c8d8;
+}
+
+.auth-success {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #edf9ef;
+  color: #347044;
+  border: 2px solid #bfe4c5;
 }
 
 .auth-form p {

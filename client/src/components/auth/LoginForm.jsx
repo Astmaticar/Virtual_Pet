@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './AuthForm.css';
 
@@ -9,6 +9,7 @@ const LoginForm = () => {
   const [formError, setFormError] = useState(null);
   const { login, error } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ const LoginForm = () => {
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Login</h2>
+        {location.state?.message && <div className="auth-success">{location.state.message}</div>}
         {(formError || error) && <div className="auth-error">{formError || error}</div>}
         <label>
           Email
@@ -36,6 +38,9 @@ const LoginForm = () => {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </label>
         <button type="submit">Login</button>
+        <p>
+          <Link to="/forgot-password">Zaboravili ste lozinku?</Link>
+        </p>
         <p>
           Nemate račun? <Link to="/register">Registrirajte se</Link>
         </p>
