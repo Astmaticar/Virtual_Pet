@@ -111,6 +111,32 @@ export const PetProvider = ({ children }) => {
     setDayOverride(null);
   };
 
+  const addExperience = async (amount) => {
+    setActionLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.put('/pet/xp', { amount });
+      setPet(response.data);
+      setPetIsDead(Boolean(response.data.isDead));
+
+      if (response.data.hasEvolved && response.data.newStage) {
+        setEvolutionInfo({
+          newStage: response.data.newStage,
+          species: response.data.species,
+        });
+
+        setTimeout(() => {
+          setEvolutionInfo(null);
+        }, 3000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Ne mogu dodati iskustvene bodove.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPet();
     fetchWeather();
@@ -265,6 +291,7 @@ export const PetProvider = ({ children }) => {
       setActionEffect,
       setWeatherPreset,
       resetWeatherPreset,
+      addExperience,
       feed,
       clean,
       play,

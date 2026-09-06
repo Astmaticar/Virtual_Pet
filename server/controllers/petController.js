@@ -264,6 +264,42 @@ exports.playWithPet = async (req, res) => {
   }
 };
 
+exports.addExperience = async (req, res) => {
+  try {
+    const amount = Number(req.body.amount);
+
+    if (!Number.isInteger(amount) || amount < 1 || amount > 1000) {
+      return res.status(400).json({ success: false, message: 'Količina XP-a mora biti cijeli broj između 1 i 1000.' });
+    }
+
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    pet.xp += amount;
+    const levelUpResult = checkLevelUp(pet);
+    await pet.save();
+
+    const response = {
+      success: true,
+      ...pet.toObject(),
+      leveledUp: levelUpResult.leveledUp,
+    };
+
+    if (levelUpResult.evolution && levelUpResult.evolution.hasEvolved) {
+      response.hasEvolved = true;
+      response.newStage = levelUpResult.evolution.newStage;
+    }
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error('Add experience error:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 exports.deletePet = async (req, res) => {
   try {
     const pet = await Pet.findOneAndDelete({ owner: req.user });

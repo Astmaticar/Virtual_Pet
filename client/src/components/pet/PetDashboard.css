@@ -110,6 +110,24 @@
   flex-wrap: wrap;
 }
 
+.scene-test-group-xp {
+  border-left: 1px solid rgba(97, 74, 52, 0.16);
+  padding-left: 12px;
+}
+
+.scene-test-xp-status {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  color: var(--text-h);
+  font-size: 0.76rem;
+}
+
+.scene-test-xp-status span {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .scene-test-label {
   font-size: 0.72rem;
   font-weight: 800;
@@ -157,6 +175,11 @@
 .scene-test-btn-reset {
   background: rgba(158, 167, 179, 0.2);
   border-color: rgba(92, 103, 120, 0.2);
+}
+
+.scene-test-btn-xp {
+  background: rgba(116, 214, 147, 0.22);
+  border-color: rgba(47, 143, 75, 0.24);
 }
 
 .dashboard-empty-state {

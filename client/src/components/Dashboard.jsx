@@ -9,6 +9,7 @@ import './pet/PetDashboard.css';
 
 const DashboardContent = () => {
   const {
+    pet,
     petExists,
     petIsDead,
     loading,
@@ -21,6 +22,7 @@ const DashboardContent = () => {
     setEvolutionInfo,
     setWeatherPreset,
     resetWeatherPreset,
+    addExperience,
   } = usePet();
 
   const effectiveIsDay = dayOverride ?? isDay;
@@ -54,6 +56,13 @@ const DashboardContent = () => {
     { label: 'Snijeg', value: 'Snow' },
     { label: 'Tuča', value: 'Thunderstorm' },
   ];
+
+  const experienceButtons = [5, 25, 100];
+  const growthStageLabels = {
+    baby: 'Beba',
+    child: 'Dijete',
+    adult: 'Odrasli',
+  };
 
   return (
     <div className="dashboard-wrapper">
@@ -90,6 +99,26 @@ const DashboardContent = () => {
             <button type="button" className="scene-test-btn scene-test-btn-reset" onClick={resetWeatherPreset}>
               Reset
             </button>
+          </div>
+        </div>
+
+        <div className="scene-test-group scene-test-group-xp">
+          <div className="scene-test-label">Faza života</div>
+          <div className="scene-test-xp-status">
+            <strong>{growthStageLabels[pet.growthStage] || pet.growthStage}</strong>
+            <span>{pet.xp || 0} XP · Level {pet.level || 1}</span>
+          </div>
+          <div className="scene-test-buttons">
+            {experienceButtons.map((amount) => (
+              <button
+                key={amount}
+                type="button"
+                className="scene-test-btn scene-test-btn-xp"
+                onClick={() => addExperience(amount)}
+              >
+                +{amount} XP
+              </button>
+            ))}
           </div>
         </div>
       </div>
