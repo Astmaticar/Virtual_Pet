@@ -6,6 +6,7 @@ const {
   cleanPet,
   playWithPet,
   addExperience,
+  decreasePetStatForTest,
   deletePet,
 } = require('../controllers/petController');
 const authMiddleware = require('../middleware/authMiddleware');
@@ -18,6 +19,7 @@ router.put('/feed', authMiddleware, feedPet);
 router.put('/clean', authMiddleware, cleanPet);
 router.put('/play', authMiddleware, playWithPet);
 router.put('/xp', authMiddleware, addExperience);
+router.put('/test-decay', authMiddleware, decreasePetStatForTest);
 router.delete('/', authMiddleware, deletePet);
 
 module.exports = router;

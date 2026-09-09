@@ -300,6 +300,37 @@ exports.addExperience = async (req, res) => {
   }
 };
 
+exports.decreasePetStatForTest = async (req, res) => {
+  try {
+    const allowedStats = ['hunger', 'cleanliness', 'happiness'];
+    const stat = req.body.stat;
+    const amount = Number(req.body.amount ?? 20);
+
+    if (!allowedStats.includes(stat) || !Number.isInteger(amount) || amount < 1 || amount > 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Neispravna statistika ili količina za testno smanjenje.',
+      });
+    }
+
+    const pet = await Pet.findOne({ owner: req.user });
+
+    if (!pet) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    pet[stat] = Math.max(0, pet[stat] - amount);
+    pet.lastUpdated = new Date();
+    await pet.save();
+
+    const isDead = isPetDead(pet);
+    return res.status(200).json({ success: true, ...pet.toObject(), isDead });
+  } catch (error) {
+    console.error('Test stat decrease error:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 exports.deletePet = async (req, res) => {
   try {
     const pet = await Pet.findOneAndDelete({ owner: req.user });

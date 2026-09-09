@@ -13,6 +13,7 @@ const DashboardContent = () => {
     petExists,
     petIsDead,
     loading,
+    actionLoading,
     weather,
     weatherCondition,
     isDay,
@@ -23,6 +24,7 @@ const DashboardContent = () => {
     setWeatherPreset,
     resetWeatherPreset,
     addExperience,
+    decreaseStatForTest,
   } = usePet();
 
   const effectiveIsDay = dayOverride ?? isDay;
@@ -119,6 +121,36 @@ const DashboardContent = () => {
                 +{amount} XP
               </button>
             ))}
+          </div>
+
+          <div className="scene-test-group scene-test-group-xp">
+            <div className="scene-test-label">Test zanemarivanja</div>
+            <div className="scene-test-buttons">
+              <button
+                type="button"
+                className="scene-test-btn scene-test-btn-xp"
+                onClick={() => decreaseStatForTest('hunger')}
+                disabled={actionLoading}
+              >
+                -20 Glad
+              </button>
+              <button
+                type="button"
+                className="scene-test-btn scene-test-btn-xp"
+                onClick={() => decreaseStatForTest('cleanliness')}
+                disabled={actionLoading}
+              >
+                -20 Čistoća
+              </button>
+              <button
+                type="button"
+                className="scene-test-btn scene-test-btn-xp"
+                onClick={() => decreaseStatForTest('happiness')}
+                disabled={actionLoading}
+              >
+                -20 Sreća
+              </button>
+            </div>
           </div>
         </div>
       </div>

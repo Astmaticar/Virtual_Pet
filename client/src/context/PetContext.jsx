@@ -137,6 +137,21 @@ export const PetProvider = ({ children }) => {
     }
   };
 
+  const decreaseStatForTest = async (stat, amount = 20) => {
+    setActionLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.put('/pet/test-decay', { stat, amount });
+      setPet(response.data);
+      setPetIsDead(Boolean(response.data.isDead));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Ne mogu smanjiti statistiku.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPet();
     fetchWeather();
@@ -292,6 +307,7 @@ export const PetProvider = ({ children }) => {
       setWeatherPreset,
       resetWeatherPreset,
       addExperience,
+      decreaseStatForTest,
       feed,
       clean,
       play,
